@@ -26,7 +26,7 @@ const HomeBanner = () => {
 
   return (
     <section className="size-full">
-      <div className="flex min-h-full max-h-[95vh] overflow-hidden relative group">
+      <div className="flex min-h-full max-h-[100vh] overflow-hidden relative group pb-8">
         <div className="absolute size-full px-4 top-0 hidden items-center justify-between group-hover:flex">
           <button
             onClick={handlePrev}
