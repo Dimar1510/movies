@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Card from "../Card/Card";
-import { selectBannerData, selectImageURL } from "../../store/movieSlice";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
 const HorizontalScroll = ({ sectionData = [], heading, isTrending }) => {
@@ -19,7 +18,7 @@ const HorizontalScroll = ({ sectionData = [], heading, isTrending }) => {
       <div className="relative">
         <div
           ref={containerRef}
-          className="flex gap-7 overflow-x-scroll relative z-10 scroll-smooth scrollbar-none"
+          className="grid grid-cols-[repeat(auto-fit,230px)] grid-flow-col gap-6 overflow-hidden overflow-x-scroll relative z-10 scroll-smooth transition-transform scrollbar-none"
         >
           {sectionData.map((data, index) => (
             <Card
@@ -27,6 +26,7 @@ const HorizontalScroll = ({ sectionData = [], heading, isTrending }) => {
               data={data}
               index={index + 1}
               isTrending={isTrending}
+              type={data.media_type}
             />
           ))}
         </div>

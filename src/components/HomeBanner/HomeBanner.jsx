@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectBannerData, selectImageURL } from "../../store/movieSlice";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
@@ -6,10 +6,25 @@ import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 const HomeBanner = ({ bannerData }) => {
   const imageUrl = useSelector(selectImageURL);
   const [currentImage, setCurrentImage] = useState(0);
+  const containerRef = useRef(null);
+  const [startX, setStartX] = useState(0);
+
+  const handleTouchStart = (e) => {
+    setStartX(e.touches[0].pageX);
+  };
+
+  const handleTouchEnd = (e) => {
+    const distance = e.changedTouches[0].pageX - startX;
+    if (distance > 0) {
+      handlePrev();
+    } else if (distance < 0) {
+      handleNext();
+    }
+  };
 
   const handleNext = () => {
     if (currentImage === bannerData.length - 1) {
-      setCurrentImage(0);
+      return;
     } else {
       setCurrentImage((prev) => prev + 1);
     }
@@ -17,7 +32,7 @@ const HomeBanner = ({ bannerData }) => {
 
   const handlePrev = () => {
     if (currentImage === 0) {
-      setCurrentImage(bannerData.length - 1);
+      return;
     } else {
       setCurrentImage((prev) => prev - 1);
     }
@@ -25,20 +40,33 @@ const HomeBanner = ({ bannerData }) => {
 
   return (
     <section className="size-full">
-      <div className="flex min-h-full max-h-[100vh] overflow-hidden relative group pb-8">
+      <div
+        ref={containerRef}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="flex min-h-full max-h-[100vh] overflow-hidden relative group pb-8"
+      >
         <div className="absolute size-full px-4 top-0 hidden items-center justify-between group-hover:flex">
-          <button
-            onClick={handlePrev}
-            className="bg-white rounded-full text-xl p-1 z-20 text-black"
-          >
-            <FaAngleLeft />
-          </button>
-          <button
-            onClick={handleNext}
-            className="bg-white rounded-full text-xl p-1 z-20 text-black"
-          >
-            <FaAngleRight />
-          </button>
+          {currentImage !== 0 ? (
+            <button
+              onClick={handlePrev}
+              className="bg-white rounded-full text-xl p-1 z-20 text-black"
+            >
+              <FaAngleLeft />
+            </button>
+          ) : (
+            <div></div>
+          )}
+          {currentImage !== bannerData.length - 1 ? (
+            <button
+              onClick={handleNext}
+              className="bg-white rounded-full text-xl p-1 z-20 text-black"
+            >
+              <FaAngleRight />
+            </button>
+          ) : (
+            <div></div>
+          )}
         </div>
         {bannerData.map((item) => (
           <div

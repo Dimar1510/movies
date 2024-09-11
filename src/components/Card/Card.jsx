@@ -3,15 +3,25 @@ import { selectImageURL } from "../../store/movieSlice";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import noImage from "../../assets/images/no-image.jpg";
 
-const Card = ({ data = [], isTrending, index }) => {
+const Card = ({ data, isTrending, index, type }) => {
   const imageUrl = useSelector(selectImageURL);
+
   return (
     <Link
-      to={"/" + data.media_type + "/" + data.id}
-      className="w-full min-w-[230px] rounded-lg overflow-hidden relative"
+      to={"/" + type + "/" + data.id}
+      className="max-w-[240px] min-w-[240px] rounded-lg overflow-hidden relative hover:scale-105 transition-transform"
     >
-      <img src={imageUrl + data.poster_path} alt="" />
+      <img
+        src={
+          data.poster_path || data.backdrop_path
+            ? imageUrl + (data.poster_path || data.backdrop_path)
+            : noImage
+        }
+        alt={data.title || data.name}
+        className="object-cover h-full"
+      />
       <div className="absolute top-2 ">
         {isTrending && (
           <div className="py-1 px-4 backdrop-blur-xl rounded-r-full bg-black/60">
@@ -25,10 +35,12 @@ const Card = ({ data = [], isTrending, index }) => {
         </h2>
         <div className="text-neutral-400 flex justify-between text-sm">
           <p>
-            {format(
-              new Date(data.release_date || data.first_air_date),
-              "MMMM do yyyy"
-            )}
+            {data.release_date ||
+              (data.first_air_date &&
+                format(
+                  new Date(data.release_date || data.first_air_date),
+                  "MMMM do yyyy"
+                ))}
           </p>
           <p className="bg-black px-1 rounded-full text-white">
             Rating: {Number(data.vote_average).toFixed(1)}
