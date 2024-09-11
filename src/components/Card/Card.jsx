@@ -3,9 +3,9 @@ import { selectImageURL } from "../../store/movieSlice";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
-const Card = ({ data, isTrending, index }) => {
-  const imageUrl = useSelector(selectImageURL);
 
+const Card = ({ data = [], isTrending, index }) => {
+  const imageUrl = useSelector(selectImageURL);
   return (
     <Link
       to={"/" + data.media_type + "/" + data.id}

@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import { selectBannerData, selectImageURL } from "../../store/movieSlice";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
-const HomeBanner = () => {
-  const bannerData = useSelector(selectBannerData);
+const HomeBanner = ({ bannerData }) => {
   const imageUrl = useSelector(selectImageURL);
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -41,15 +40,15 @@ const HomeBanner = () => {
             <FaAngleRight />
           </button>
         </div>
-        {bannerData.map((data) => (
+        {bannerData.map((item) => (
           <div
-            key={data.id}
+            key={item.id}
             className="min-w-full min-h-[450px] lg:min-h-full relative transition-transform duration-500"
             style={{ transform: `translateX(-${currentImage * 100}%` }}
           >
             <div className="size-full">
               <img
-                src={imageUrl + data.backdrop_path}
+                src={imageUrl + item.backdrop_path}
                 alt=""
                 className="size-full object-cover"
               />
@@ -60,15 +59,15 @@ const HomeBanner = () => {
             <div className="container mx-auto">
               <div className="container mx-auto absolute bottom-0 max-w-md px-3">
                 <h2 className="font-bold text-2xl">
-                  {data.title || data.name}
+                  {item.title || item.name}
                 </h2>
                 <p className="text-ellipsis line-clamp-3 my-2">
-                  {data.overview}
+                  {item.overview}
                 </p>
                 <div className="flex items-center gap-3">
-                  <p>Rating: {Number(data.vote_average).toFixed(1) + "⭐"}</p>
+                  <p>Rating: {Number(item.vote_average).toFixed(1) + "⭐"}</p>
                   <span>|</span>
-                  <p>View: {Number(data.popularity).toFixed(0)}</p>
+                  <p>View: {Number(item.popularity).toFixed(0)}</p>
                 </div>
                 <button className="bg-white px-4 py-2 text-black font-bold rounded-lg mt-4 hover:bg-gradient-to-l hover:from-red-500 hover:to-orange-500 shadow-md transition-colors">
                   See details

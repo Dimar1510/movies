@@ -3,7 +3,7 @@ import Card from "../Card/Card";
 import { selectBannerData, selectImageURL } from "../../store/movieSlice";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
-const HorizontalScroll = ({ sectionData = [], heading }) => {
+const HorizontalScroll = ({ sectionData = [], heading, isTrending }) => {
   const containerRef = useRef(null);
   const handleNext = () => {
     containerRef.current.scrollLeft += 300;
@@ -26,7 +26,7 @@ const HorizontalScroll = ({ sectionData = [], heading }) => {
               key={data.id + heading}
               data={data}
               index={index + 1}
-              isTrending={true}
+              isTrending={isTrending}
             />
           ))}
         </div>

@@ -5,19 +5,10 @@ import MobileNav from "./components/MobileNav/MobileNav";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setBannerData, setImageURL } from "./store/movieSlice";
+import { setImageURL } from "./store/movieSlice";
 
 const App = () => {
   const dispatch = useDispatch();
-
-  const fetchTrendingData = async () => {
-    try {
-      const response = await axios.get("/trending/all/week");
-      dispatch(setBannerData(response.data.results));
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const fetchConfig = async () => {
     try {
@@ -30,7 +21,6 @@ const App = () => {
 
   useEffect(() => {
     fetchConfig();
-    fetchTrendingData();
   }, []);
 
   return (
@@ -39,7 +29,7 @@ const App = () => {
       <div>
         <Outlet />
       </div>
-      {/* <Footer /> */}
+      <Footer />
       <MobileNav />
     </main>
   );
