@@ -64,7 +64,7 @@ const Explore = () => {
     <div className="pt-16 pb-8">
       <ScrollTop />
       <div className="container mx-auto">
-        <h3 className="capitalize text-lg lg:text-xl font-semibold my-3">
+        <h3 className="capitalize px-3 text-lg lg:text-xl font-semibold my-3">
           Popular {urlParams.explore === "movie" ? "movies" : "TV Shows"}
         </h3>
         <div className="flex flex-wrap gap-6 justify-evenly">
