@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Card from "../components/Card/Card";
 import debounce from "lodash/debounce";
 import Spinner from "../components/Spinner/Spinner";
+import ScrollTop from "../components/ScrollTop/ScrollTop";
 const Explore = () => {
   const urlParams = useParams();
   const [pageNumber, setPageNumber] = useState(1);
@@ -61,6 +62,7 @@ const Explore = () => {
 
   return (
     <div className="pt-16 pb-8">
+      <ScrollTop />
       <div className="container mx-auto">
         <h3 className="capitalize text-lg lg:text-xl font-semibold my-3">
           Popular {urlParams.explore === "movie" ? "movies" : "TV Shows"}

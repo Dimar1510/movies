@@ -5,6 +5,7 @@ import Card from "../components/Card/Card";
 import { useSelector } from "react-redux";
 import { selectSearchInput } from "../store/movieSlice";
 import SearchInput from "../components/SearchInput/SearchInput";
+import ScrollTop from "../components/ScrollTop/ScrollTop";
 
 const Search = () => {
   const location = useLocation();
@@ -35,7 +36,7 @@ const Search = () => {
       const delayedClear = setTimeout(() => {
         navigate("/search");
         setData([]);
-      }, 750);
+      }, 100);
       return () => clearTimeout(delayedClear);
     } else {
       setLoading(true);
@@ -49,6 +50,7 @@ const Search = () => {
   return (
     <div className="pt-16 pb-8">
       <div className="container mx-auto">
+        <ScrollTop />
         <div className="lg:hidden m-4 border-white border p-1 rounded">
           <SearchInput />
         </div>
