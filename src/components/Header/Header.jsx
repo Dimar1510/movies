@@ -3,21 +3,20 @@ import logo from "../../assets/images/logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import userIcon from "../../assets/images/user.png";
 import { IoSearchOutline } from "react-icons/io5";
-import { navigation } from "../navigation";
+import { navigation } from "../utils/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSearchInput, setSearchInput } from "../../store/movieSlice";
+import SearchInput from "../SearchInput/SearchInput";
 
 const Header = () => {
-  const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
+  const searchInput = useSelector(selectSearchInput);
 
   useEffect(() => {
     if (searchInput) {
       navigate(`/search?q=${searchInput}`);
     }
   }, [searchInput]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
 
   return (
     <header className="fixed top-0 w-full h-16 bg-black bg-opacity-90 z-50">
@@ -39,21 +38,12 @@ const Header = () => {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-5">
-          <form
-            className="hidden lg:flex items-center gap-2"
-            onSubmit={handleSubmit}
-          >
-            <input
-              type="text"
-              placeholder="Search..."
-              className="bg-transparent px-1 outline-none border-none"
-              onChange={(e) => setSearchInput(e.target.value)}
-              value={searchInput}
-            />
-            <button className="text-2xl text-white">
+          <div className="hidden lg:flex items-center gap-2">
+            <SearchInput />
+            <label htmlFor="search-input" className="text-2xl text-white">
               <IoSearchOutline />
-            </button>
-          </form>
+            </label>
+          </div>
 
           <button className="active:scale-75 transition-transform">
             <img src={userIcon} alt="" className="w-8 h-8 rounded-full" />

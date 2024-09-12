@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import HomeBanner from "../components/HomeBanner/HomeBanner";
 import HorizontalScroll from "../components/HorizontalScroll/HorizontalScroll";
 import { useFetch } from "../hooks/useFetch";
+import Spinner from "../components/Spinner/Spinner";
 
 const Home = () => {
   const {
@@ -32,7 +33,11 @@ const Home = () => {
 
   const renderSection = (heading, data, loading, error, isTrending = false) => {
     if (loading) {
-      return <div className="pt-16">Loading {heading}</div>;
+      return (
+        <div className="pt-16 w-full flex justify-center">
+          <Spinner />
+        </div>
+      );
     }
     if (error) {
       return (
