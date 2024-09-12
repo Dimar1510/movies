@@ -35,12 +35,11 @@ const Card = ({ data, isTrending, index, type }) => {
         </h2>
         <div className="text-neutral-400 flex justify-between text-sm">
           <p>
-            {data.release_date ||
-              (data.first_air_date &&
-                format(
-                  new Date(data.release_date || data.first_air_date),
-                  "MMMM do yyyy"
-                ))}
+            {(data.release_date || data.first_air_date) &&
+              format(
+                new Date(data.release_date || data.first_air_date),
+                "MMMM do yyyy"
+              )}
           </p>
           <p className="bg-black px-1 rounded-full text-white">
             Rating: {Number(data.vote_average).toFixed(1)}

@@ -54,10 +54,10 @@ const Header = () => {
               </button>
             )}
           </div>
-
+          {/* 
           <button className="active:scale-75 transition-transform">
             <img src={userIcon} alt="" className="w-8 h-8 rounded-full" />
-          </button>
+          </button> */}
         </div>
       </div>
     </header>

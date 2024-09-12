@@ -3,7 +3,7 @@ import Card from "../Card/Card";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
 const HorizontalScroll = ({
-  sectionData = [],
+  sectionData,
   heading,
   isTrending = false,
   type,
@@ -15,7 +15,7 @@ const HorizontalScroll = ({
   const handlePrev = () => {
     containerRef.current.scrollLeft -= 300;
   };
-  console.log(sectionData);
+
   return (
     <div className="container mx-auto px-3 my-10">
       <h2 className="text-xl lg:text-2xl font-bold mb-2 text-white">

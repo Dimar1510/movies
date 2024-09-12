@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectBannerData, selectImageURL } from "../../store/movieSlice";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 const HomeBanner = ({ bannerData }) => {
   const imageUrl = useSelector(selectImageURL);
@@ -85,21 +86,22 @@ const HomeBanner = ({ bannerData }) => {
             <div className="absolute top-0 size-full bg-gradient-to-t from-neutral-900 to-transparent"></div>
 
             <div className="container mx-auto">
-              <div className="container mx-auto absolute bottom-0 max-w-md px-3">
+              <div className="container mx-auto absolute bottom-5 max-w-md px-3 flex flex-col gap-3">
                 <h2 className="font-bold text-2xl">
                   {item.title || item.name}
                 </h2>
-                <p className="text-ellipsis line-clamp-3 my-2">
-                  {item.overview}
-                </p>
+                <p className="text-ellipsis line-clamp-3">{item.overview}</p>
                 <div className="flex items-center gap-3">
                   <p>Rating: {Number(item.vote_average).toFixed(1) + "⭐"}</p>
                   <span>|</span>
                   <p>View: {Number(item.popularity).toFixed(0)}</p>
                 </div>
-                <button className="bg-white px-4 py-2 text-black font-bold rounded-lg mt-4 hover:bg-gradient-to-l hover:from-red-500 hover:to-orange-500 shadow-md transition-colors">
+                <Link
+                  to={`/${item.media_type}/${item.id}`}
+                  className="bg-white px-4 py-2 text-black font-bold rounded-lg hover:bg-gradient-to-l hover:from-red-500 hover:to-orange-500 shadow-md transition-colors w-fit"
+                >
                   See details
-                </button>
+                </Link>
               </div>
             </div>
           </div>
