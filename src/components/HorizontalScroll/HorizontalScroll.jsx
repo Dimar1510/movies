@@ -2,7 +2,12 @@ import React, { useRef, useState } from "react";
 import Card from "../Card/Card";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
-const HorizontalScroll = ({ sectionData = [], heading, isTrending }) => {
+const HorizontalScroll = ({
+  sectionData = [],
+  heading,
+  isTrending = false,
+  type,
+}) => {
   const containerRef = useRef(null);
   const handleNext = () => {
     containerRef.current.scrollLeft += 300;
@@ -10,6 +15,7 @@ const HorizontalScroll = ({ sectionData = [], heading, isTrending }) => {
   const handlePrev = () => {
     containerRef.current.scrollLeft -= 300;
   };
+  console.log(sectionData);
   return (
     <div className="container mx-auto px-3 my-10">
       <h2 className="text-xl lg:text-2xl font-bold mb-2 text-white">
@@ -20,13 +26,13 @@ const HorizontalScroll = ({ sectionData = [], heading, isTrending }) => {
           ref={containerRef}
           className="grid grid-cols-[repeat(auto-fit,230px)] grid-flow-col gap-6 overflow-hidden overflow-x-scroll relative z-10 scroll-smooth transition-transform scrollbar-none"
         >
-          {sectionData.map((data, index) => (
+          {sectionData.map((item, index) => (
             <Card
-              key={data.id + heading}
-              data={data}
+              key={item.id + heading}
+              data={item}
               index={index + 1}
               isTrending={isTrending}
-              type={data.media_type}
+              type={item.media_type || type}
             />
           ))}
         </div>

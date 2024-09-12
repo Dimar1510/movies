@@ -64,21 +64,35 @@ const Home = () => {
     <>
       {trendingData && <HomeBanner bannerData={trendingData} />}
 
+      {trendingData && (
+        <HorizontalScroll
+          heading={"Trending"}
+          sectionData={trendingData}
+          isTrending={true}
+        />
+      )}
+
       {nowPlayingData && (
         <HorizontalScroll
           heading={"Now Playing"}
           sectionData={nowPlayingData}
+          type={"movie"}
         />
       )}
 
       {topRatedData && (
-        <HorizontalScroll heading={"Top Rated"} sectionData={topRatedData} />
+        <HorizontalScroll
+          heading={"Top Rated"}
+          sectionData={topRatedData}
+          type={"movie"}
+        />
       )}
 
       {popularShowsData && (
         <HorizontalScroll
           heading={"Popular Shows"}
           sectionData={popularShowsData}
+          type={"tv"}
         />
       )}
 
@@ -86,6 +100,7 @@ const Home = () => {
         <HorizontalScroll
           heading={"On Air Shows"}
           sectionData={onAirShowsData}
+          type={"tv"}
         />
       )}
     </>
