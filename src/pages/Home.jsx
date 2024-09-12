@@ -31,58 +31,62 @@ const Home = () => {
     error: onAirShowsError,
   } = useFetch("/tv/on_the_air");
 
-  const renderSection = (heading, data, loading, error, isTrending = false) => {
-    if (loading) {
-      return (
-        <div className="pt-16 w-full flex justify-center">
-          <Spinner />
-        </div>
-      );
-    }
-    if (error) {
-      return (
-        <div className="pt-16">
-          API error while loading {heading}: {error}
-        </div>
-      );
-    }
+  const isLoading =
+    trendingLoading ||
+    nowPlayingLoading ||
+    topRatedLoading ||
+    popularShowsLoading ||
+    onAirShowsLoading;
+
+  const hasError =
+    trendingError ||
+    nowPlayingError ||
+    topRatedError ||
+    popularShowsError ||
+    onAirShowsError;
+
+  if (isLoading)
     return (
-      <HorizontalScroll
-        heading={heading}
-        sectionData={data}
-        isTrending={isTrending}
-      />
+      <div className="fixed size-fit m-auto left-0 right-0 top-0 bottom-0 scale-[2]">
+        <Spinner />
+      </div>
     );
-  };
+
+  if (hasError)
+    return (
+      <div className="pt-16">
+        Error loading data, something went wrong with API. Please try again
+        later.
+      </div>
+    );
 
   return (
     <>
       {trendingData && <HomeBanner bannerData={trendingData} />}
-      {renderSection(
-        "Now Trending",
-        trendingData,
-        trendingLoading,
-        trendingError,
-        true
+
+      {nowPlayingData && (
+        <HorizontalScroll
+          heading={"Now Playing"}
+          sectionData={nowPlayingData}
+        />
       )}
-      {renderSection(
-        "Now Playing",
-        nowPlayingData,
-        nowPlayingLoading,
-        nowPlayingError
+
+      {topRatedData && (
+        <HorizontalScroll heading={"Top Rated"} sectionData={topRatedData} />
       )}
-      {renderSection("Top Rated", topRatedData, topRatedLoading, topRatedError)}
-      {renderSection(
-        "Popular Shows",
-        popularShowsData,
-        popularShowsLoading,
-        popularShowsError
+
+      {popularShowsData && (
+        <HorizontalScroll
+          heading={"Popular Shows"}
+          sectionData={popularShowsData}
+        />
       )}
-      {renderSection(
-        "On Air Shows",
-        onAirShowsData,
-        onAirShowsLoading,
-        onAirShowsError
+
+      {onAirShowsData && (
+        <HorizontalScroll
+          heading={"On Air Shows"}
+          sectionData={onAirShowsData}
+        />
       )}
     </>
   );
