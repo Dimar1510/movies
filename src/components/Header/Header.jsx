@@ -39,7 +39,7 @@ const Header = () => {
         </nav>
         <div className="ml-auto flex items-center gap-5">
           <div className="hidden lg:flex items-center gap-2">
-            <SearchInput />
+            <SearchInput isHeader={true} />
             <label htmlFor="search-input" className="text-2xl text-white">
               <IoSearchOutline />
             </label>

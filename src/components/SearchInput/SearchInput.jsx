@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSearchInput, setSearchInput } from "../../store/movieSlice";
 
-const SearchInput = () => {
+const SearchInput = ({ isHeader = false }) => {
   const dispatch = useDispatch();
   const searchInput = useSelector(selectSearchInput);
   const handleInputChange = (e) => {
@@ -13,10 +13,10 @@ const SearchInput = () => {
     <input
       type="text"
       placeholder="Search..."
-      className="bg-transparent px-1 outline-none border-none"
+      className="bg-transparent px-1 outline-none border-none w-full"
       onChange={handleInputChange}
       value={searchInput}
-      id="search-input"
+      id={isHeader ? "search-input" : ""}
     />
   );
 };
