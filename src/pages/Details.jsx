@@ -6,17 +6,24 @@ import { selectImageURL } from "../store/movieSlice";
 import Divider from "../components/Divider/Divider";
 import { format } from "date-fns";
 import noImage from "../assets/images/no-image.jpg";
-import HorizontalScroll from "../components/HorizontalScroll/HorizontalScroll";
 import Spinner from "../components/Spinner/Spinner";
+import Recommendations from "../components/Recommendations/Recommendations";
+import Similar from "../components/Similar/Similar";
+import CastList from "../components/CastList/CastList";
+
+const Detail = ({ hasDivider = true, text }) => {
+  return (
+    <>
+      {hasDivider && <span className="hidden md:inline">|</span>}
+      <p>{text}</p>
+    </>
+  );
+};
 
 const Details = () => {
   const params = useParams();
   const type = params.explore;
   const imageUrl = useSelector(selectImageURL);
-  const { data: similarData } = useFetch(`/${type}/${params?.id}/similar`);
-  const { data: recommendationData } = useFetch(
-    `/${type}/${params?.id}/recommendations`
-  );
   const { data, error, loading } = useFetch(`/${type}/${params?.id}`);
   const { data: castData } = useFetch(`/${type}/${params?.id}/credits`);
 
@@ -48,7 +55,15 @@ const Details = () => {
       </div>
     );
 
-  if (data && castData && similarData && recommendationData)
+  if (error)
+    return (
+      <div className="pt-16">
+        Error loading data, something went wrong with API. Please try again
+        later.
+      </div>
+    );
+
+  if (data)
     return (
       <div className="pt-6">
         <div className="w-full h-[300px] relative hidden lg:block">
@@ -77,33 +92,22 @@ const Details = () => {
             <Divider />
             <div className="flex gap-3 flex-col md:flex-row">
               {data.vote_average !== undefined && (
-                <>
-                  <p>Rating: {Number(data.vote_average).toFixed(1)}</p>
-                </>
+                <Detail
+                  hasDivider={false}
+                  text={`Rating: ${Number(data.vote_average).toFixed(1)}`}
+                />
               )}
               {data.popularity > 0 && (
-                <>
-                  <span className="hidden md:inline">|</span>
-                  <p>View: {Number(data.popularity).toFixed(0)}</p>
-                </>
+                <Detail text={`View: ${Number(data.popularity).toFixed(0)}`} />
               )}
               {data.runtime > 0 && (
-                <>
-                  <span className="hidden md:inline">|</span>
-                  <p>Duration: {data.runtime} min</p>
-                </>
+                <Detail text={`Duration: ${data.runtime} min`} />
               )}
               {data.number_of_seasons > 0 && (
-                <>
-                  <span className="hidden md:inline">|</span>
-                  <p>Seasons: {data.number_of_seasons}</p>
-                </>
+                <Detail text={`Seasons: ${data.number_of_seasons}`} />
               )}
               {data.number_of_episodes > 0 && (
-                <>
-                  <span className="hidden md:inline">|</span>
-                  <p>Episodes: {data.number_of_episodes}</p>
-                </>
+                <Detail text={`Episodes: ${data.number_of_episodes}`} />
               )}
             </div>
             <Divider />
@@ -112,35 +116,26 @@ const Details = () => {
             <Divider />
             <div className="flex gap-3 flex-col md:flex-row">
               {data.origin_country && (
-                <>
-                  <p>Country: {data.origin_country[0]}</p>
-                </>
+                <Detail
+                  hasDivider={false}
+                  text={`Country: ${data.origin_country[0]}`}
+                />
               )}
-              {data.status && (
-                <>
-                  <span className="hidden md:inline">|</span>
-                  <p>Status: {data.status}</p>
-                </>
-              )}
+              {data.status && <Detail text={`Status: ${data.status}`} />}
               {(data.release_date || data.first_air_date) && (
-                <>
-                  <span className="hidden md:inline">|</span>
-                  <p>
-                    Release Date:{" "}
-                    {format(
-                      new Date(data.release_date || data.first_air_date),
-                      "MMMM do yyyy"
-                    )}
-                  </p>
-                </>
+                <Detail
+                  text={` Release Date: ${format(
+                    new Date(data.release_date || data.first_air_date),
+                    "MMMM do yyyy"
+                  )}`}
+                />
               )}
               {data.revenue > 0 && (
-                <>
-                  <span className="hidden md:inline">|</span>
-                  <p>
-                    Revenue: ${Number(data.revenue).toLocaleString("en-US")}
-                  </p>
-                </>
+                <Detail
+                  text={`Revenue: ${Number(data.revenue).toLocaleString(
+                    "en-US"
+                  )}`}
+                />
               )}
             </div>
             {directors && (
@@ -169,55 +164,14 @@ const Details = () => {
                   <span className="text-neutral-300">{writers}</span>
                 </p>
               </>
-            )}{" "}
-            <Divider />
-            {castData.cast.length > 0 && (
-              <div>
-                <h3 className="text-white font-bold">Cast:</h3>
-                <div className="flex gap-5 my-4 flex-wrap">
-                  {castData.cast
-                    .sort((a, b) => (a.order > b.order ? 1 : -1))
-                    .map((actor) => (
-                      <div key={actor.id} className="flex flex-col">
-                        <img
-                          src={
-                            actor.profile_path
-                              ? imageUrl + actor.profile_path
-                              : noImage
-                          }
-                          alt={actor.name}
-                          className="w-24 h-24 object-cover rounded-full"
-                        />
-                        <p className="font-bold text-center text-sm max-w-24">
-                          {actor.name}
-                        </p>
-                        <p className="text-center text-xs text-neutral-400 max-w-24 ">
-                          {actor.character}
-                        </p>
-                      </div>
-                    ))}
-                </div>
-              </div>
             )}
+            <Divider />
+            <CastList data={castData} />
           </div>
         </div>
 
-        <>
-          {similarData.length > 0 && (
-            <HorizontalScroll
-              sectionData={similarData}
-              heading={type === "tv" ? "Similar TV Shows" : "Similar Movies"}
-              type={type}
-            />
-          )}
-          {recommendationData.length > 0 && (
-            <HorizontalScroll
-              sectionData={recommendationData}
-              heading={"Recommendations"}
-              type={type}
-            />
-          )}
-        </>
+        <Similar />
+        <Recommendations />
       </div>
     );
 };

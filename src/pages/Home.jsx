@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import HomeBanner from "../components/HomeBanner/HomeBanner";
 import HorizontalScroll from "../components/HorizontalScroll/HorizontalScroll";
 import { useFetch } from "../hooks/useFetch";

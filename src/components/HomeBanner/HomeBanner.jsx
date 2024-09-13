@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { selectBannerData, selectImageURL } from "../../store/movieSlice";
+import { selectImageURL } from "../../store/movieSlice";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
@@ -78,7 +78,7 @@ const HomeBanner = ({ bannerData }) => {
             <div className="size-full">
               <img
                 src={imageUrl + item.backdrop_path}
-                alt=""
+                alt={item.name}
                 className="size-full object-cover"
               />
             </div>

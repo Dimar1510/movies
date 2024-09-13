@@ -10,6 +10,11 @@
   padding: 0;
 }
 
+@font-face {
+  font-family: Posterama;
+  src: url("./assets/fonts/Posterama.ttf");
+}
+
 body {
   font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
     "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
@@ -33,4 +38,10 @@ code {
   .scrollbar-none {
     scrollbar-width: none;
   }
+}
+
+.site-logo {
+  font-family: Posterama, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
 }

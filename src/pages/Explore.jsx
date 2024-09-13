@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Card from "../components/Card/Card";
@@ -6,6 +5,7 @@ import debounce from "lodash/debounce";
 import Spinner from "../components/Spinner/Spinner";
 import ScrollTop from "../components/ScrollTop/ScrollTop";
 import { useFetchExplore } from "../hooks/useFetchExplore";
+
 const Explore = () => {
   const urlParams = useParams();
   const [pageNumber, setPageNumber] = useState(1);
