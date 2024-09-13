@@ -19,6 +19,7 @@ const Details = () => {
   );
   const { data, error, loading } = useFetch(`/${type}/${params?.id}`);
   const { data: castData } = useFetch(`/${type}/${params?.id}/credits`);
+
   const writers = castData?.crew
     ?.filter((el) => el?.job === "Writer")
     ?.map((el) => el?.name)
@@ -46,10 +47,10 @@ const Details = () => {
         <Spinner />
       </div>
     );
-  console.log(data);
+
   if (data && castData && similarData && recommendationData)
     return (
-      <div>
+      <div className="pt-6">
         <div className="w-full h-[300px] relative hidden lg:block">
           <div className="size-full">
             <img
@@ -74,7 +75,7 @@ const Details = () => {
             </h2>
             <p>{data.tagline}</p>
             <Divider />
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-col md:flex-row">
               {data.vote_average !== undefined && (
                 <>
                   <p>Rating: {Number(data.vote_average).toFixed(1)}</p>
@@ -82,25 +83,25 @@ const Details = () => {
               )}
               {data.popularity > 0 && (
                 <>
-                  <span>|</span>
+                  <span className="hidden md:inline">|</span>
                   <p>View: {Number(data.popularity).toFixed(0)}</p>
                 </>
               )}
               {data.runtime > 0 && (
                 <>
-                  <span>|</span>
+                  <span className="hidden md:inline">|</span>
                   <p>Duration: {data.runtime} min</p>
                 </>
               )}
               {data.number_of_seasons > 0 && (
                 <>
-                  <span>|</span>
+                  <span className="hidden md:inline">|</span>
                   <p>Seasons: {data.number_of_seasons}</p>
                 </>
               )}
               {data.number_of_episodes > 0 && (
                 <>
-                  <span>|</span>
+                  <span className="hidden md:inline">|</span>
                   <p>Episodes: {data.number_of_episodes}</p>
                 </>
               )}
@@ -109,7 +110,7 @@ const Details = () => {
             <h3 className="font-bold mb-1 lg:text-lg text-white">Overview</h3>
             <p>{data.overview}</p>
             <Divider />
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-col md:flex-row">
               {data.origin_country && (
                 <>
                   <p>Country: {data.origin_country[0]}</p>
@@ -117,13 +118,13 @@ const Details = () => {
               )}
               {data.status && (
                 <>
-                  <span>|</span>
+                  <span className="hidden md:inline">|</span>
                   <p>Status: {data.status}</p>
                 </>
               )}
               {(data.release_date || data.first_air_date) && (
                 <>
-                  <span>|</span>
+                  <span className="hidden md:inline">|</span>
                   <p>
                     Release Date:{" "}
                     {format(
@@ -135,7 +136,7 @@ const Details = () => {
               )}
               {data.revenue > 0 && (
                 <>
-                  <span>|</span>
+                  <span className="hidden md:inline">|</span>
                   <p>
                     Revenue: ${Number(data.revenue).toLocaleString("en-US")}
                   </p>

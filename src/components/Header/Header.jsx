@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/logo.png";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import userIcon from "../../assets/images/user.png";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { navigation } from "../utils/navigation";
@@ -11,11 +11,20 @@ import SearchInput from "../SearchInput/SearchInput";
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const searchInput = useSelector(selectSearchInput);
 
   useEffect(() => {
-    if (searchInput) {
-      navigate(`/search?q=${searchInput}`);
+    if (searchInput === "" && location.search) {
+      const delayedClear = setTimeout(() => {
+        navigate("/search");
+      }, 100);
+      return () => clearTimeout(delayedClear);
+    } else {
+      const delayedFetch = setTimeout(() => {
+        navigate(`/search?q=${searchInput}`);
+      }, 750);
+      return () => clearTimeout(delayedFetch);
     }
   }, [searchInput]);
 

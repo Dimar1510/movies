@@ -1,51 +1,18 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Card from "../components/Card/Card";
-import { useSelector } from "react-redux";
-import { selectSearchInput } from "../store/movieSlice";
 import SearchInput from "../components/SearchInput/SearchInput";
 import ScrollTop from "../components/ScrollTop/ScrollTop";
+import { useFetchSearch } from "../hooks/useFetchSearch";
+
+const Heading = ({ children }) => {
+  return (
+    <h3 className="text-lg lg:text-xl font-semibold my-3 px-4">{children}</h3>
+  );
+};
 
 const Search = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const searchInput = useSelector(selectSearchInput);
-
-  const fetchSearchData = async (query) => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`/search/multi`, {
-        params: {
-          query,
-        },
-      });
-      setData(response.data.results);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (searchInput === "") {
-      setLoading(false);
-      const delayedClear = setTimeout(() => {
-        navigate("/search");
-        setData([]);
-      }, 100);
-      return () => clearTimeout(delayedClear);
-    } else {
-      setLoading(true);
-      const delayedFetch = setTimeout(() => {
-        fetchSearchData(location.search.slice(3));
-      }, 750);
-      return () => clearTimeout(delayedFetch);
-    }
-  }, [location.search, searchInput]);
+  const { data, loading } = useFetchSearch();
 
   return (
     <div className="pt-16 pb-8">
@@ -54,33 +21,38 @@ const Search = () => {
         <div className="lg:hidden m-4 border-white border p-1 rounded">
           <SearchInput />
         </div>
-        <h3 className="text-lg lg:text-xl font-semibold my-3 px-4">
-          {!loading && searchInput.length > 0 && data.length === 0 ? (
-            "No search results"
-          ) : loading ? (
-            "Loading..."
-          ) : data.length > 0 ? (
-            <>
-              Search results shown:{" "}
-              <span className="italic font-light">
-                {decodeURIComponent(location?.search)
-                  .slice(3)
-                  .split("%20")
-                  .join(" ")}
-              </span>
-            </>
-          ) : (
-            "Start typing to search for movies or TV shows..."
-          )}
-        </h3>
-        <div className="flex flex-wrap gap-6 justify-evenly">
-          {data.map(
-            (item) =>
-              (item.media_type === "tv" || item.media_type === "movie") && (
-                <Card key={item.id} data={item} type={item.media_type} />
-              )
-          )}
-        </div>
+        {!data && (
+          <Heading>Start typing to search for movies or TV shows...</Heading>
+        )}
+        {data && (
+          <>
+            <Heading>
+              {data.length > 0 && !loading ? (
+                <>
+                  Search results shown:{" "}
+                  <span className="italic font-light">
+                    {decodeURIComponent(location?.search)
+                      .slice(3)
+                      .split("%20")
+                      .join(" ")}
+                  </span>
+                </>
+              ) : loading ? (
+                "Loading..."
+              ) : (
+                "No search results"
+              )}
+            </Heading>
+            <div className="flex flex-wrap gap-6 justify-evenly">
+              {data.map(
+                (item) =>
+                  (item.media_type === "tv" || item.media_type === "movie") && (
+                    <Card key={item.id} data={item} type={item.media_type} />
+                  )
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ export const useFetch = (endpoint) => {
       const response = await axios.get(endpoint);
       if (response) {
         setData(response.data.results || response.data);
+        setError(null);
       }
     } catch (error) {
       console.log(error);

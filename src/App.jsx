@@ -6,28 +6,33 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setImageURL, setSearchInput } from "./store/movieSlice";
+import { useFetchConfig } from "./hooks/useFetchConfig";
 
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const fetchConfig = async () => {
-    try {
-      const response = await axios.get("/configuration");
-      dispatch(setImageURL(response.data.images.secure_base_url + "original"));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+  const { data, error } = useFetchConfig();
 
   useEffect(() => {
-    fetchConfig();
-  }, []);
+    if (data) {
+      dispatch(setImageURL(data + "original"));
+    }
+  }, [data]);
 
   useEffect(() => {
     if (location.pathname !== "/search") {
       dispatch(setSearchInput(""));
     }
   }, [location.pathname]);
+
+  if (error)
+    return (
+      <div className="pt-16">
+        Error loading data, something went wrong with API. Please try again
+        later.
+      </div>
+    );
 
   return (
     <main className="pb-14 lg:pb-0 flex flex-col min-h-svh">
