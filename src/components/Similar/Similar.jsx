@@ -8,7 +8,7 @@ const Similar = () => {
   const type = params.explore;
   const { data } = useFetch(`/${type}/${params?.id}/similar`);
 
-  if (data)
+  if (data && data.length > 0)
     return (
       <HorizontalScroll
         sectionData={data}

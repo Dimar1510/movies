@@ -8,7 +8,7 @@ const Recommendations = () => {
   const type = params.explore;
   const { data } = useFetch(`/${type}/${params?.id}/recommendations`);
 
-  if (data)
+  if (data && data.length > 0)
     return (
       <HorizontalScroll
         sectionData={data}

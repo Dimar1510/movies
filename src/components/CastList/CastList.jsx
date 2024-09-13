@@ -9,7 +9,9 @@ const CastList = ({ data }) => {
   if (data)
     return (
       <div>
-        <h3 className="text-white font-bold">Cast:</h3>
+        <h3 className="text-white font-bold">
+          {data.cast.length > 0 ? "Cast:" : "No information about the cast"}
+        </h3>
         <div className="flex gap-5 my-4 flex-wrap">
           {data.cast
             .sort((a, b) => (a.order > b.order ? 1 : -1))

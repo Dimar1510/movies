@@ -15,7 +15,6 @@ const Header = () => {
   useEffect(() => {
     if (searchInput === "" && location.pathname === "/search") {
       const delayedClear = setTimeout(() => {
-        console.log("nav");
         navigate("/search");
       }, 100);
       return () => clearTimeout(delayedClear);
