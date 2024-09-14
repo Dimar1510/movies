@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setImageURL, setSearchInput } from "./store/movieSlice";
 import { useFetchConfig } from "./hooks/useFetchConfig";
+import ErrorElement from "./components/ErrorElement/ErrorElement";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -26,13 +27,7 @@ const App = () => {
     }
   }, [location.pathname]);
 
-  if (error)
-    return (
-      <div className="pt-16">
-        Error loading data, something went wrong with API. Please try again
-        later.
-      </div>
-    );
+  if (error) return <ErrorElement errorText={error} />;
 
   return (
     <main className="pb-14 lg:pb-0 flex flex-col min-h-svh">

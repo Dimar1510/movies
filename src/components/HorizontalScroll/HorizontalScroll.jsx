@@ -1,6 +1,18 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Card from "../Card/Card";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
+
+const ArrowButton = ({ direction, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      className="bg-white p-1 text-black rounded-full -mr-2 z-20"
+    >
+      {direction === "left" && <FaAngleLeft />}
+      {direction === "right" && <FaAngleRight />}
+    </button>
+  );
+};
 
 const HorizontalScroll = ({
   sectionData,
@@ -9,12 +21,23 @@ const HorizontalScroll = ({
   type,
 }) => {
   const containerRef = useRef(null);
+  const [scrollLeft, setScrollLeft] = useState(0);
   const handleNext = () => {
-    containerRef.current.scrollLeft += 300;
+    if (
+      containerRef.current.scrollWidth - containerRef.current.offsetWidth >
+      scrollLeft
+    )
+      setScrollLeft((prev) => prev + 300);
   };
   const handlePrev = () => {
-    containerRef.current.scrollLeft -= 300;
+    if (scrollLeft > 0) {
+      setScrollLeft((prev) => prev - 300);
+    }
   };
+
+  useEffect(() => {
+    containerRef.current.scrollLeft = scrollLeft;
+  }, [scrollLeft]);
 
   return (
     <div className="container mx-auto px-3 my-10">
@@ -37,18 +60,8 @@ const HorizontalScroll = ({
           ))}
         </div>
         <div className="absolute top-0 hidden lg:flex justify-between items-center size-full">
-          <button
-            onClick={handlePrev}
-            className="bg-white p-1 text-black rounded-full -ml-2 z-20"
-          >
-            <FaAngleLeft />
-          </button>
-          <button
-            onClick={handleNext}
-            className="bg-white p-1 text-black rounded-full -mr-2 z-20"
-          >
-            <FaAngleRight />
-          </button>
+          <ArrowButton direction={"left"} onClick={handlePrev} />
+          <ArrowButton direction={"right"} onClick={handleNext} />
         </div>
       </div>
     </div>

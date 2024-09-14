@@ -10,6 +10,7 @@ import Spinner from "../components/Spinner/Spinner";
 import Recommendations from "../components/Recommendations/Recommendations";
 import Similar from "../components/Similar/Similar";
 import CastList from "../components/CastList/CastList";
+import ErrorElement from "../components/ErrorElement/ErrorElement";
 
 const Detail = ({ hasDivider = true, text }) => {
   return (
@@ -55,13 +56,7 @@ const Details = () => {
       </div>
     );
 
-  if (error)
-    return (
-      <div className="pt-16">
-        Error loading data, something went wrong with API. Please try again
-        later.
-      </div>
-    );
+  if (error) return <ErrorElement errorText={error} />;
 
   if (data)
     return (

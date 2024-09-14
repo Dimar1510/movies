@@ -30,7 +30,11 @@ const Header = () => {
     <header className="hidden lg:block fixed top-0 w-full h-16 bg-black bg-opacity-90 z-50">
       <div className="container mx-auto px-3 flex items-center h-full">
         <NavLink to={"/"}>
-          <h1 className="site-logo text-3xl text-themeColor">KinoNerd</h1>
+          <h1 className="site-logo text-3xl bg-gradient-to-r from-themeColor to-yellow-400 bg-clip-text text-transparent font-bold">
+            <span className="font-extrabold">KИHO</span>
+            <span className="font-sans font-extrabold">N</span>
+            <span>ERD</span>
+          </h1>
         </NavLink>
         <nav className="hidden lg:flex items-center gap-2 ml-5">
           {navigation.map((nav) => (

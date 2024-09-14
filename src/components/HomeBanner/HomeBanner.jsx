@@ -2,7 +2,20 @@ import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectImageURL } from "../../store/movieSlice";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import ButtonLink from "../ButtonLink/ButtonLink";
+
+const ArrowButton = ({ direction, onClick, isVisible }) => {
+  if (!isVisible) return <div></div>;
+  return (
+    <button
+      onClick={onClick}
+      className="bg-white p-1 text-black rounded-full -mr-2 z-20"
+    >
+      {direction === "left" && <FaAngleLeft />}
+      {direction === "right" && <FaAngleRight />}
+    </button>
+  );
+};
 
 const HomeBanner = ({ bannerData }) => {
   const imageUrl = useSelector(selectImageURL);
@@ -48,26 +61,16 @@ const HomeBanner = ({ bannerData }) => {
         className="flex min-h-full max-h-[100vh] overflow-hidden relative group pb-8"
       >
         <div className="absolute size-full px-4 top-0 hidden items-center justify-between group-hover:flex">
-          {currentImage !== 0 ? (
-            <button
-              onClick={handlePrev}
-              className="bg-white rounded-full text-xl p-1 z-20 text-black"
-            >
-              <FaAngleLeft />
-            </button>
-          ) : (
-            <div></div>
-          )}
-          {currentImage !== bannerData.length - 1 ? (
-            <button
-              onClick={handleNext}
-              className="bg-white rounded-full text-xl p-1 z-20 text-black"
-            >
-              <FaAngleRight />
-            </button>
-          ) : (
-            <div></div>
-          )}
+          <ArrowButton
+            isVisible={currentImage !== 0}
+            onClick={handlePrev}
+            direction={"left"}
+          />
+          <ArrowButton
+            isVisible={currentImage !== bannerData.length - 1}
+            onClick={handleNext}
+            direction={"right"}
+          />
         </div>
         {bannerData.map((item) => (
           <div
@@ -96,12 +99,9 @@ const HomeBanner = ({ bannerData }) => {
                   <span>|</span>
                   <p>View: {Number(item.popularity).toFixed(0)}</p>
                 </div>
-                <Link
-                  to={`/${item.media_type}/${item.id}`}
-                  className="bg-white px-4 py-2 text-black font-bold rounded-lg hover:bg-gradient-to-l hover:from-red-500 hover:to-orange-500 shadow-md transition-colors w-fit"
-                >
+                <ButtonLink href={`/${item.media_type}/${item.id}`}>
                   See details
-                </Link>
+                </ButtonLink>
               </div>
             </div>
           </div>

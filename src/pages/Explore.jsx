@@ -5,6 +5,7 @@ import debounce from "lodash/debounce";
 import Spinner from "../components/Spinner/Spinner";
 import ScrollTop from "../components/ScrollTop/ScrollTop";
 import { useFetchExplore } from "../hooks/useFetchExplore";
+import ErrorElement from "../components/ErrorElement/ErrorElement";
 
 const Explore = () => {
   const urlParams = useParams();
@@ -56,13 +57,7 @@ const Explore = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  if (error)
-    return (
-      <div className="pt-16">
-        Error loading data, something went wrong with API. Please try again
-        later.
-      </div>
-    );
+  if (error) return <ErrorElement errorText={error} />;
 
   if (exploreData)
     return (

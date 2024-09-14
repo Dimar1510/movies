@@ -2,6 +2,8 @@ import HomeBanner from "../components/HomeBanner/HomeBanner";
 import HorizontalScroll from "../components/HorizontalScroll/HorizontalScroll";
 import { useFetch } from "../hooks/useFetch";
 import Spinner from "../components/Spinner/Spinner";
+import { useEffect, useState } from "react";
+import ErrorElement from "../components/ErrorElement/ErrorElement";
 
 const Home = () => {
   const {
@@ -53,10 +55,15 @@ const Home = () => {
 
   if (hasError)
     return (
-      <div className="pt-16">
-        Error loading data, something went wrong with API. Please try again
-        later.
-      </div>
+      <ErrorElement
+        errorText={
+          trendingError ||
+          nowPlayingError ||
+          topRatedError ||
+          popularShowsError ||
+          onAirShowsError
+        }
+      />
     );
 
   return (
