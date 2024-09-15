@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import Card from "../Card/Card";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
+import CardVideo from "../CardVideo/CardVideo";
+import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
-const ArrowButton = ({ direction, onClick }) => {
+const ArrowButton = ({ direction, onClick, isVisible = true }) => {
+  if (!isVisible) return <div></div>;
   return (
     <button
       onClick={onClick}
@@ -19,15 +22,27 @@ const HorizontalScroll = ({
   heading,
   isTrending = false,
   type,
+  isVideo = false,
 }) => {
   const containerRef = useRef(null);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [isLeftVisible, setIsLeftVisible] = useState(true);
+  const [isRightVisible, setIsRightVisible] = useState(true);
+  const [playVideo, setPlayVideo] = useState(false);
+  const [playVideoId, setPlayVideoId] = useState("");
+
+  const handlePlayVideo = (data) => {
+    setPlayVideoId(data);
+    setPlayVideo(true);
+  };
+
   const handleNext = () => {
     if (
       containerRef.current.scrollWidth - containerRef.current.offsetWidth >
       scrollLeft
-    )
+    ) {
       setScrollLeft((prev) => prev + 300);
+    }
   };
   const handlePrev = () => {
     if (scrollLeft > 0) {
@@ -36,35 +51,71 @@ const HorizontalScroll = ({
   };
 
   useEffect(() => {
+    if (scrollLeft === 0) {
+      setIsLeftVisible(false);
+    } else {
+      setIsLeftVisible(true);
+    }
+    if (
+      containerRef.current.scrollWidth - containerRef.current.offsetWidth <
+      scrollLeft
+    ) {
+      setIsRightVisible(false);
+    } else {
+      setIsRightVisible(true);
+    }
     containerRef.current.scrollLeft = scrollLeft;
   }, [scrollLeft]);
 
   return (
-    <div className="container mx-auto px-3 my-10">
+    <section className="container mx-auto px-3 my-10" id={heading}>
       <h2 className="text-xl lg:text-2xl font-bold mb-2 text-white">
         {heading}
       </h2>
       <div className="relative">
         <div
           ref={containerRef}
-          className="grid grid-cols-[repeat(auto-fit,230px)] grid-flow-col gap-6 overflow-hidden overflow-x-scroll relative z-10 scroll-smooth transition-transform scrollbar-none"
+          className="flex gap-6 overflow-hidden overflow-x-scroll relative z-10 scroll-smooth transition-transform scrollbar-none"
         >
-          {sectionData.map((item, index) => (
-            <Card
-              key={item.id + heading}
-              data={item}
-              index={index + 1}
-              isTrending={isTrending}
-              type={item.media_type || type}
-            />
-          ))}
+          {isVideo
+            ? sectionData.map((item) => (
+                <CardVideo
+                  videoKey={item.key}
+                  key={item.key}
+                  onClick={() => handlePlayVideo(item.key)}
+                  videoName={item.name}
+                  date={item.published_at}
+                  type={item.type}
+                />
+              ))
+            : sectionData.map((item, index) => (
+                <Card
+                  key={item.id + heading}
+                  data={item}
+                  index={index + 1}
+                  isTrending={isTrending}
+                  type={item.media_type || type}
+                />
+              ))}
         </div>
         <div className="absolute top-0 hidden lg:flex justify-between items-center size-full">
-          <ArrowButton direction={"left"} onClick={handlePrev} />
-          <ArrowButton direction={"right"} onClick={handleNext} />
+          <ArrowButton
+            direction={"left"}
+            onClick={handlePrev}
+            isVisible={isLeftVisible}
+          />
+
+          <ArrowButton
+            direction={"right"}
+            onClick={handleNext}
+            isVisible={isRightVisible}
+          />
         </div>
       </div>
-    </div>
+      {playVideo && (
+        <VideoPlayer videoId={playVideoId} close={() => setPlayVideo(false)} />
+      )}
+    </section>
   );
 };
 

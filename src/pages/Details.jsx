@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import Recommendations from "../components/Recommendations/Recommendations";
 import Similar from "../components/Similar/Similar";
 import CastList from "../components/CastList/CastList";
 import ErrorElement from "../components/ErrorElement/ErrorElement";
+import Videos from "../components/Videos/Videos";
 
 const Detail = ({ hasDivider = true, text }) => {
   return (
@@ -164,7 +165,7 @@ const Details = () => {
             <CastList data={castData} />
           </div>
         </div>
-
+        <Videos itemId={params?.id} />
         <Similar />
         <Recommendations />
       </div>
