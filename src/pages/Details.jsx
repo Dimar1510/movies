@@ -196,7 +196,7 @@ const Details = () => {
             <CastList data={castData.cast} />
           </div>
         </div>
-        <Gallery itemId={params?.id} />
+        <Gallery id={params?.id} type={type} />
         <Videos itemId={params?.id} />
         <Similar />
         <Recommendations />

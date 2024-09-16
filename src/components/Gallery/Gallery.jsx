@@ -28,6 +28,9 @@ const Gallery = ({ id, type }) => {
   const imageUrl = useSelector(selectImageURL);
   const slider = containerRef.current;
   const [currentImage, setCurrentImage] = useState(null);
+
+  const imgArray =
+    imageData?.profiles || imageData?.backdrops.slice(0, 10) || [];
   const handleNext = () => {
     if (
       containerRef.current.scrollWidth - containerRef.current.offsetWidth >
@@ -88,9 +91,9 @@ const Gallery = ({ id, type }) => {
       dialogRef.current?.removeEventListener("click", closeOnOutsideClick);
   });
 
-  console.log({ ...containerRef.current });
+  console.log(imageData);
 
-  if (imageData && imageData.profiles.length > 0)
+  if (imageData && imgArray.length > 0)
     return (
       <>
         <section className="container mx-auto px-3 my-10">
@@ -102,15 +105,16 @@ const Gallery = ({ id, type }) => {
               ref={containerRef}
               className="flex gap-6 overflow-hidden overflow-x-scroll relative z-10 scroll-smooth transition-transform scrollbar-none"
             >
-              {imageData.profiles.map((image) => (
+              {imgArray.map((image) => (
                 <button
                   onClick={() => handleClick(image.file_path)}
                   key={image.file_path}
+                  className="hover:scale-105 transition-transform will-change-transform"
                 >
                   <img
                     src={imageUrl + image.file_path}
                     alt={"image"}
-                    className="max-w-[120px]"
+                    className="max-h-[250px] max-w-[250px]"
                   />
                 </button>
               ))}
