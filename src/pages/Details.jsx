@@ -29,7 +29,7 @@ const Details = () => {
   const { data, error, loading } = useFetch(`/${type}/${params?.id}`);
   const { data: castData } = useFetch(`/${type}/${params?.id}/credits`);
 
-  const writers = castData?.crew
+  const writers = data?.crew
     ?.filter((el) => el?.job === "Writer")
     ?.map((el) => el?.name)
     ?.join(", ");
@@ -39,11 +39,11 @@ const Details = () => {
     ?.map((el) => el?.name)
     ?.join(", ");
 
-  const creators = castData?.crew
-    ?.filter((el) => el?.job === "Executive Producer")
-    ?.map((el) => el?.name)
-    ?.join(", ");
+  const creators = data?.created_by?.map((el) => el?.name)?.join(", ");
 
+  const genres = data?.genres?.map((el) => el?.name);
+
+  console.log(genres);
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -78,7 +78,14 @@ const Details = () => {
               src={data.poster_path ? imageUrl + data.poster_path : noImage}
               alt="poster"
               className="w-60 object-cover rounded-lg"
-            />
+            />{" "}
+            <Divider />
+            {data.genres.length > 0 &&
+              genres.map((item) => (
+                <p className="text-sm" key={item}>
+                  {item}
+                </p>
+              ))}
           </div>
           <div className="flex flex-col w-full mt-2">
             <h2 className="text-xl lg:text-3xl font-bold text-white">
@@ -86,6 +93,7 @@ const Details = () => {
             </h2>
             <p>{data.tagline}</p>
             <Divider />
+
             <div className="flex gap-3 flex-col md:flex-row">
               {data.vote_average !== undefined && (
                 <Detail
@@ -147,7 +155,7 @@ const Details = () => {
               <>
                 <Divider />
                 <p className="text-white">
-                  Executive producers:{" "}
+                  Created by:{" "}
                   <span className="text-neutral-300">{creators}</span>
                 </p>
               </>
