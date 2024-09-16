@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import noImage from "../../assets/images/no-image.jpg";
 
-const Card = ({ data, isTrending, index, type }) => {
+const Card = ({ data, isTrending = false, index = 0, type }) => {
   const imageUrl = useSelector(selectImageURL);
 
   return (
@@ -15,8 +15,9 @@ const Card = ({ data, isTrending, index, type }) => {
     >
       <img
         src={
-          data.poster_path || data.backdrop_path
-            ? imageUrl + (data.poster_path || data.backdrop_path)
+          data.poster_path || data.backdrop_path || data.profile_path
+            ? imageUrl +
+              (data.poster_path || data.backdrop_path || data.profile_path)
             : noImage
         }
         alt={data.title || data.name}
@@ -34,16 +35,24 @@ const Card = ({ data, isTrending, index, type }) => {
           {data.title || data.name}
         </h2>
         <div className="text-neutral-400 flex justify-between text-sm">
-          <p>
-            {(data.release_date || data.first_air_date) &&
-              format(
+          {(data.release_date || data.first_air_date) && (
+            <p>
+              {format(
                 new Date(data.release_date || data.first_air_date),
                 "MMMM do yyyy"
               )}
-          </p>
-          <p className="bg-black px-1 rounded-full text-white">
-            Rating: {Number(data.vote_average).toFixed(1)}
-          </p>
+            </p>
+          )}
+          {data.vote_average > 0 && (
+            <p className="bg-black px-1 rounded-full text-white">
+              Rating: {Number(data.vote_average).toFixed(1)}
+            </p>
+          )}
+          {data.known_for_department && (
+            <p className=" text-white">
+              Known for: {data.known_for_department}
+            </p>
+          )}
         </div>
       </div>
     </Link>

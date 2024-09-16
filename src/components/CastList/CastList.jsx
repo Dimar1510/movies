@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { selectImageURL } from "../../store/movieSlice";
 import noImage from "../../assets/images/no-image.jpg";
+import { Link } from "react-router-dom";
 
 const CastList = ({ data }) => {
   const imageUrl = useSelector(selectImageURL);
@@ -10,20 +11,25 @@ const CastList = ({ data }) => {
     return (
       <div>
         <h3 className="text-white font-bold">
-          {data.cast.length > 0 ? "Cast:" : "No information about the cast"}
+          {data.length > 0 ? "Cast:" : "No information about the cast"}
         </h3>
         <div className="flex gap-5 my-4 flex-wrap">
-          {data.cast
+          {data
             .sort((a, b) => (a.order > b.order ? 1 : -1))
             .map((actor) => (
               <div key={actor.id} className="flex flex-col">
-                <img
-                  src={
-                    actor.profile_path ? imageUrl + actor.profile_path : noImage
-                  }
-                  alt={actor.name}
-                  className="w-24 h-24 object-cover rounded-full"
-                />
+                <Link to={`/person/${actor.id}`}>
+                  <img
+                    src={
+                      actor.profile_path
+                        ? imageUrl + actor.profile_path
+                        : noImage
+                    }
+                    alt={actor.name}
+                    className="w-24 h-24 object-cover rounded-full hover:shadow-themeColor hover:shadow-[0px_0px_5px_1px]"
+                  />
+                </Link>
+
                 <p className="font-bold text-center text-sm max-w-24">
                   {actor.name}
                 </p>

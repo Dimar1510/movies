@@ -32,19 +32,27 @@ const Home = () => {
     error: onAirShowsError,
   } = useFetch("/tv/on_the_air");
 
+  const {
+    data: people,
+    loading: peopleLoading,
+    error: peopleError,
+  } = useFetch("/person/popular");
+
   const isLoading =
     trendingLoading ||
     nowPlayingLoading ||
     topRatedLoading ||
     popularShowsLoading ||
-    onAirShowsLoading;
+    onAirShowsLoading ||
+    peopleLoading;
 
   const hasError =
     trendingError ||
     nowPlayingError ||
     topRatedError ||
     popularShowsError ||
-    onAirShowsError;
+    onAirShowsError ||
+    peopleError;
 
   if (isLoading)
     return (
@@ -61,7 +69,8 @@ const Home = () => {
           nowPlayingError ||
           topRatedError ||
           popularShowsError ||
-          onAirShowsError
+          onAirShowsError ||
+          peopleError
         }
       />
     );
@@ -107,6 +116,14 @@ const Home = () => {
           heading={"On Air Shows"}
           sectionData={onAirShowsData}
           type={"tv"}
+        />
+      )}
+
+      {people && (
+        <HorizontalScroll
+          heading={"People"}
+          sectionData={people}
+          type={"person"}
         />
       )}
     </>

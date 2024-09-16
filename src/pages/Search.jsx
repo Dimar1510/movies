@@ -22,7 +22,9 @@ const Search = () => {
           <SearchInput />
         </div>
         {!data && (
-          <Heading>Start typing to search for movies or TV shows...</Heading>
+          <Heading>
+            Start typing to search for movies, TV shows or people...
+          </Heading>
         )}
         {data && (
           <>
@@ -44,12 +46,9 @@ const Search = () => {
               )}
             </Heading>
             <div className="flex flex-wrap gap-6 justify-evenly">
-              {data.map(
-                (item) =>
-                  (item.media_type === "tv" || item.media_type === "movie") && (
-                    <Card key={item.id} data={item} type={item.media_type} />
-                  )
-              )}
+              {data.map((item) => (
+                <Card key={item.id} data={item} type={item.media_type} />
+              ))}
             </div>
           </>
         )}

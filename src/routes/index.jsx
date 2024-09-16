@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Details from "../pages/Details";
 import Explore from "../pages/Explore";
 import Search from "../pages/Search";
+import Person from "../pages/Person";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
         path: "search",
         element: <Search />,
       },
+      { path: "person/:id", element: <Person /> },
     ],
   },
 ]);

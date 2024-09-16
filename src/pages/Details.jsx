@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { useSelector } from "react-redux";
 import { selectImageURL } from "../store/movieSlice";
@@ -12,6 +12,7 @@ import Similar from "../components/Similar/Similar";
 import CastList from "../components/CastList/CastList";
 import ErrorElement from "../components/ErrorElement/ErrorElement";
 import Videos from "../components/Videos/Videos";
+import Gallery from "../components/Gallery/Gallery";
 
 const Detail = ({ hasDivider = true, text }) => {
   return (
@@ -22,6 +23,17 @@ const Detail = ({ hasDivider = true, text }) => {
   );
 };
 
+const CrewMember = ({ name, id }) => {
+  return (
+    <Link
+      className="text-white font-semibold underline hover:text-themeColor"
+      to={`/person/${id}`}
+    >
+      {name}
+    </Link>
+  );
+};
+
 const Details = () => {
   const params = useParams();
   const type = params.explore;
@@ -29,21 +41,14 @@ const Details = () => {
   const { data, error, loading } = useFetch(`/${type}/${params?.id}`);
   const { data: castData } = useFetch(`/${type}/${params?.id}/credits`);
 
-  const writers = data?.crew
-    ?.filter((el) => el?.job === "Writer")
-    ?.map((el) => el?.name)
-    ?.join(", ");
+  const writers = castData?.crew?.filter((el) => el?.job === "Writer");
 
-  const directors = castData?.crew
-    ?.filter((el) => el?.job === "Director")
-    ?.map((el) => el?.name)
-    ?.join(", ");
+  const directors = castData?.crew?.filter((el) => el?.job === "Director");
 
-  const creators = data?.created_by?.map((el) => el?.name)?.join(", ");
+  const creators = data?.created_by;
 
   const genres = data?.genres?.map((el) => el?.name);
 
-  console.log(genres);
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -59,7 +64,7 @@ const Details = () => {
 
   if (error) return <ErrorElement errorText={error} />;
 
-  if (data)
+  if (data && castData)
     return (
       <div className="pt-6">
         <div className="w-full h-[300px] relative hidden lg:block">
@@ -78,7 +83,7 @@ const Details = () => {
               src={data.poster_path ? imageUrl + data.poster_path : noImage}
               alt="poster"
               className="w-60 object-cover rounded-lg"
-            />{" "}
+            />
             <Divider />
             {data.genres.length > 0 &&
               genres.map((item) => (
@@ -142,37 +147,56 @@ const Details = () => {
                 />
               )}
             </div>
-            {directors && (
+            {directors && directors.length > 0 && (
               <>
                 <Divider />
-                <p className="text-white">
+                <p className="flex gap-2">
                   Directed by:{" "}
-                  <span className="text-neutral-300">{directors}</span>
+                  {directors.map((person) => (
+                    <CrewMember
+                      key={person.id}
+                      id={person.id}
+                      name={person.name}
+                    />
+                  ))}
                 </p>
               </>
             )}
-            {creators && (
+            {creators && creators.length > 0 && (
               <>
                 <Divider />
-                <p className="text-white">
+                <p className="flex gap-2">
                   Created by:{" "}
-                  <span className="text-neutral-300">{creators}</span>
+                  {creators.map((person) => (
+                    <CrewMember
+                      key={person.id}
+                      id={person.id}
+                      name={person.name}
+                    />
+                  ))}
                 </p>
               </>
             )}
-            {writers && (
+            {writers && writers.length > 0 && (
               <>
                 <Divider />
-                <p className="text-white">
+                <p className="flex gap-2">
                   Written by:{" "}
-                  <span className="text-neutral-300">{writers}</span>
+                  {writers.map((person) => (
+                    <CrewMember
+                      key={person.id}
+                      id={person.id}
+                      name={person.name}
+                    />
+                  ))}
                 </p>
               </>
             )}
             <Divider />
-            <CastList data={castData} />
+            <CastList data={castData.cast} />
           </div>
         </div>
+        <Gallery itemId={params?.id} />
         <Videos itemId={params?.id} />
         <Similar />
         <Recommendations />
