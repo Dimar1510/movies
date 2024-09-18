@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Card from "../components/Card/Card";
 import debounce from "lodash/debounce";
 import Spinner from "../components/Spinner/Spinner";
@@ -15,9 +15,13 @@ const Explore = () => {
   const [data, setData] = useState<ICardItem[]>([]);
   const totalPages = useRef(0);
   const type = urlParams.explore;
+  const navigate = useNavigate();
+
   // Reset when the category changes
   useEffect(() => {
-    setData([]);
+    if (!isMediaType(type)) {
+      navigate("/");
+    } else setData([]);
     setPageNumber(1);
   }, [type]);
 

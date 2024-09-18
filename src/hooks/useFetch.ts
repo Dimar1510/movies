@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { ICardItem } from "../store/types";
 
@@ -15,8 +15,9 @@ export const useFetch = (endpoint: string) => {
         setError(null);
       }
     } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
+      if (error instanceof AxiosError) {
+        setError(error.message + ". " + error.response?.data.status_message);
+        console.log(error);
       } else {
         throw error;
       }
