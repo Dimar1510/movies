@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { ICardItem } from "../store/types";
 
 export const useFetchSearch = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<ICardItem[] | null>(null);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
 
-  const fetchSearchData = async (query) => {
+  const fetchSearchData = async (query: string) => {
     try {
       setLoading(true);
       const response = await axios.get(`/search/multi`, {

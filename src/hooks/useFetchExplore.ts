@@ -1,14 +1,15 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { ICardItem } from "../store/types";
 
-export const useFetchExplore = (category, pageNumber) => {
-  const [data, setData] = useState(null);
+export const useFetchExplore = (category: string, pageNumber: number) => {
+  const [data, setData] = useState<ICardItem[] | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(0);
   const visitedRef = useRef(false);
 
-  const fetchData = async (endpoint) => {
+  const fetchData = async (endpoint: string) => {
     try {
       setLoading(true);
       const response = await axios.get(endpoint, {
@@ -19,8 +20,11 @@ export const useFetchExplore = (category, pageNumber) => {
         setTotalPages(response.data.total_pages);
       }
     } catch (error) {
-      console.log(error);
-      setError(error.message);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        throw error;
+      }
     } finally {
       setLoading(false);
     }
