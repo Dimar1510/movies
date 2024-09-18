@@ -1,6 +1,5 @@
 const ERROR_MESSAGES = {
-  default:
-    "Error loading data, something is wrong with the API. Please try again later.",
+  default: "Error loading data.",
   responsePrefix: "Response: ",
 };
 
