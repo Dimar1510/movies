@@ -1,17 +1,17 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import HorizontalScroll from "../HorizontalScroll/HorizontalScroll";
 import { useFetch } from "../../hooks/useFetch";
+import isMediaType from "../utils/isMediaType";
 
-const Videos = ({ itemId }) => {
+const Videos = ({ itemId }: { itemId: string }) => {
   const params = useParams();
   const type = params.explore;
-  const { data: videoData } = useFetch(`/${type}/${itemId}/videos`);
+  const { data } = useFetch(`/${type}/${itemId}/videos`);
 
-  if (videoData && videoData.length > 0)
+  if (data && Array.isArray(data) && data.length > 0 && isMediaType(type))
     return (
       <HorizontalScroll
-        sectionData={videoData}
+        sectionData={data}
         heading={"Videos"}
         type={type}
         isVideo={true}

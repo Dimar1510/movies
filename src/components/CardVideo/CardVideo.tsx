@@ -1,8 +1,22 @@
 import { format } from "date-fns";
-import React from "react";
 import { FaPlay } from "react-icons/fa";
+import { FC } from "react";
 
-const CardVideo = ({ videoKey, videoName, date, onClick, type }) => {
+interface IProps {
+  videoKey: string;
+  videoName: string;
+  videoDate?: string;
+  onClick: () => void;
+  type: string;
+}
+
+const CardVideo: FC<IProps> = ({
+  videoKey,
+  videoName,
+  videoDate,
+  onClick,
+  type,
+}) => {
   return (
     <button
       onClick={onClick}
@@ -24,7 +38,7 @@ const CardVideo = ({ videoKey, videoName, date, onClick, type }) => {
           {videoName}
         </h2>
         <div className="text-neutral-400 flex justify-between text-sm">
-          <p>{date && format(new Date(date), "MMMM do yyyy")}</p>
+          <p>{videoDate && format(new Date(videoDate), "MMMM do yyyy")}</p>
           <p className="bg-black px-1 rounded-full text-white">{type}</p>
         </div>
       </div>

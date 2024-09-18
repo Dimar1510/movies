@@ -1,33 +1,21 @@
-import React, { useRef, useState } from "react";
+import { TouchEvent, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectImageURL } from "../../store/movieSlice";
-import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 import ButtonLink from "../ButtonLink/ButtonLink";
+import { Direction, ICardItem } from "../../store/types";
+import ArrowButton from "../ArrowButton/ArrowButton";
 
-const ArrowButton = ({ direction, onClick, isVisible }) => {
-  if (!isVisible) return <div></div>;
-  return (
-    <button
-      onClick={onClick}
-      className="bg-white p-1 text-black rounded-full -mr-2 z-20"
-    >
-      {direction === "left" && <FaAngleLeft />}
-      {direction === "right" && <FaAngleRight />}
-    </button>
-  );
-};
-
-const HomeBanner = ({ bannerData }) => {
+const HomeBanner = ({ bannerData }: { bannerData: ICardItem[] }) => {
   const imageUrl = useSelector(selectImageURL);
   const [currentImage, setCurrentImage] = useState(0);
   const containerRef = useRef(null);
   const [startX, setStartX] = useState(0);
 
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: TouchEvent<HTMLElement>) => {
     setStartX(e.touches[0].pageX);
   };
 
-  const handleTouchEnd = (e) => {
+  const handleTouchEnd = (e: TouchEvent<HTMLElement>) => {
     const distance = e.changedTouches[0].pageX - startX;
     if (distance > 0) {
       handlePrev();
@@ -64,12 +52,12 @@ const HomeBanner = ({ bannerData }) => {
           <ArrowButton
             isVisible={currentImage !== 0}
             onClick={handlePrev}
-            direction={"left"}
+            direction={Direction.left}
           />
           <ArrowButton
             isVisible={currentImage !== bannerData.length - 1}
             onClick={handleNext}
-            direction={"right"}
+            direction={Direction.right}
           />
         </div>
         {bannerData.map((item) => (

@@ -1,16 +1,16 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { navigation } from "../utils/navigation";
-import { useDispatch, useSelector } from "react-redux";
 import { selectSearchInput, setSearchInput } from "../../store/movieSlice";
 import SearchInput from "../SearchInput/SearchInput";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 const Header = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
-  const searchInput = useSelector(selectSearchInput);
+  const searchInput = useAppSelector(selectSearchInput);
 
   useEffect(() => {
     if (searchInput === "" && location.pathname === "/search") {

@@ -22,15 +22,22 @@ export interface ICardItem {
   origin_country?: string[];
   status?: string;
   revenue?: number;
+  profiles?: Image[];
+  logos?: Image[];
+  backdrops?: Image[];
+  media_type?: MediaType;
+  key?: string;
+  type?: string;
+  published_at?: string;
 }
 
-export enum MediaType {
-  "tv",
-  "movie",
-  "person",
-}
+export type MediaType = "tv" | "movie" | "person";
 
 export enum Direction {
   "left",
   "right",
+}
+
+interface Image {
+  file_path: string;
 }

@@ -1,41 +1,33 @@
-import React, { useEffect, useRef, useState } from "react";
-import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
+import { FC, useEffect, useRef, useState } from "react";
 import { selectImageURL } from "../../store/movieSlice";
-import { useSelector } from "react-redux";
 import { useFetch } from "../../hooks/useFetch";
 import ImageModal from "../ImageModal/ImageModal";
+import { Direction, MediaType } from "../../store/types";
+import { useAppSelector } from "../../store/hooks";
+import ArrowButton from "../ArrowButton/ArrowButton";
 
-const ArrowButton = ({ direction, onClick, isVisible = true }) => {
-  if (!isVisible) return <div></div>;
-  return (
-    <button
-      onClick={onClick}
-      className="bg-white p-1 text-black rounded-full -mr-2 z-20"
-    >
-      {direction === "left" && <FaAngleLeft />}
-      {direction === "right" && <FaAngleRight />}
-    </button>
-  );
-};
+interface IProps {
+  id: number;
+  type: MediaType;
+}
 
-const Gallery = ({ id, type }) => {
-  const dialogRef = useRef(null);
-  const containerRef = useRef(null);
+const Gallery: FC<IProps> = ({ id, type }) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { data: imageData } = useFetch(`/${type}/${id}/images`);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [isLeftVisible, setIsLeftVisible] = useState(true);
   const [isRightVisible, setIsRightVisible] = useState(true);
-  const imageUrl = useSelector(selectImageURL);
+  const imageUrl = useAppSelector(selectImageURL);
   const slider = containerRef.current;
-  const [currentImage, setCurrentImage] = useState(null);
+  const [currentImage, setCurrentImage] = useState<string | null>(null);
 
-  const imgArray =
-    imageData?.profiles || imageData?.backdrops.slice(0, 10) || [];
+  const imgArray = !Array.isArray(imageData)
+    ? imageData?.profiles || imageData?.backdrops?.slice(0, 10) || []
+    : [];
+
   const handleNext = () => {
-    if (
-      containerRef.current.scrollWidth - containerRef.current.offsetWidth >
-      scrollLeft
-    ) {
+    if ((slider?.scrollWidth ?? 0) - (slider?.offsetWidth ?? 0) > scrollLeft) {
       setScrollLeft((prev) => prev + 300);
     }
   };
@@ -52,18 +44,15 @@ const Gallery = ({ id, type }) => {
     } else {
       setIsLeftVisible(true);
     }
-    if (
-      containerRef.current.scrollWidth - containerRef.current.offsetWidth <=
-      scrollLeft
-    ) {
+    if (slider.scrollWidth - slider.offsetWidth <= scrollLeft) {
       setIsRightVisible(false);
     } else {
       setIsRightVisible(true);
     }
-    containerRef.current.scrollLeft = scrollLeft;
+    slider.scrollLeft = scrollLeft;
   }, [scrollLeft, slider]);
 
-  const handleClick = (image) => {
+  const handleClick = (image: string) => {
     setCurrentImage(image);
     dialogRef.current?.showModal();
   };
@@ -73,7 +62,7 @@ const Gallery = ({ id, type }) => {
   };
 
   useEffect(() => {
-    const closeOnOutsideClick = (e) => {
+    const closeOnOutsideClick = (e: MouseEvent) => {
       if (dialogRef.current) {
         const dialogDimensions = dialogRef.current.getBoundingClientRect();
         if (
@@ -121,13 +110,13 @@ const Gallery = ({ id, type }) => {
             </div>
             <div className="absolute top-0 hidden lg:flex justify-between items-center size-full">
               <ArrowButton
-                direction={"left"}
+                direction={Direction.left}
                 onClick={handlePrev}
                 isVisible={isLeftVisible}
               />
 
               <ArrowButton
-                direction={"right"}
+                direction={Direction.right}
                 onClick={handleNext}
                 isVisible={isRightVisible}
               />

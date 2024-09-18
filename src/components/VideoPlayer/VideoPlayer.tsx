@@ -1,12 +1,17 @@
-import React, { useEffect, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { IoClose } from "react-icons/io5";
 
-const VideoPlayer = ({ videoId, close }) => {
-  const dialogRef = useRef(null);
-  const outsideRef = useRef(null);
+interface IProps {
+  videoId: string;
+  close: () => void;
+}
+
+const VideoPlayer: FC<IProps> = ({ videoId, close }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const outsideRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function closePlayer(e) {
+    function closePlayer(e: KeyboardEvent) {
       if (e.key === "Escape") {
         close();
       }
@@ -16,7 +21,7 @@ const VideoPlayer = ({ videoId, close }) => {
   }, [videoId]);
 
   useEffect(() => {
-    const closeOnOutsideClick = (e) => {
+    const closeOnOutsideClick = (e: MouseEvent) => {
       if (dialogRef.current) {
         const dialogDimensions = dialogRef.current.getBoundingClientRect();
         if (

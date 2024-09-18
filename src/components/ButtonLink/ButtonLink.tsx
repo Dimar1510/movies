@@ -1,7 +1,12 @@
-import React from "react";
+import { FC, ReactNode } from "react";
 import { Link } from "react-router-dom";
 
-const ButtonLink = ({ href, children }) => {
+interface IProps {
+  href: string;
+  children: ReactNode;
+}
+
+const ButtonLink: FC<IProps> = ({ href, children }) => {
   return (
     <Link
       to={href}

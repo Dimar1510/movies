@@ -1,11 +1,11 @@
-import React from "react";
-import { useSelector } from "react-redux";
 import { selectImageURL } from "../../store/movieSlice";
 import noImage from "../../assets/images/no-image.jpg";
 import { Link } from "react-router-dom";
+import { ICardItem } from "../../store/types";
+import { useAppSelector } from "../../store/hooks";
 
-const CastList = ({ data }) => {
-  const imageUrl = useSelector(selectImageURL);
+const CastList = ({ data }: { data: ICardItem[] }) => {
+  const imageUrl = useAppSelector(selectImageURL);
 
   if (data)
     return (
@@ -15,7 +15,7 @@ const CastList = ({ data }) => {
         </h3>
         <div className="flex gap-5 my-4 flex-wrap">
           {data
-            .sort((a, b) => (a.order > b.order ? 1 : -1))
+            .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
             .map((actor) => (
               <div key={actor.id} className="flex flex-col">
                 <Link to={`/person/${actor.id}`}>

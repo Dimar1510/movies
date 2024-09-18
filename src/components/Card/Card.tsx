@@ -1,12 +1,20 @@
-import React from "react";
 import { selectImageURL } from "../../store/movieSlice";
-import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import noImage from "../../assets/images/no-image.jpg";
+import { ICardItem, MediaType } from "../../store/types";
+import { FC } from "react";
+import { useAppSelector } from "../../store/hooks";
 
-const Card = ({ data, isTrending = false, index = 0, type }) => {
-  const imageUrl = useSelector(selectImageURL);
+interface IProps {
+  data: ICardItem;
+  isTrending?: boolean;
+  index?: number;
+  type: MediaType;
+}
+
+const Card: FC<IProps> = ({ data, isTrending = false, index = 0, type }) => {
+  const imageUrl = useAppSelector(selectImageURL);
 
   return (
     <Link
@@ -35,15 +43,16 @@ const Card = ({ data, isTrending = false, index = 0, type }) => {
           {data.title || data.name}
         </h2>
         <div className="text-neutral-400 flex justify-between text-sm">
-          {(data.release_date || data.first_air_date) && (
-            <p>
-              {format(
-                new Date(data.release_date || data.first_air_date),
-                "MMMM do yyyy"
-              )}
-            </p>
-          )}
-          {data.vote_average > 0 && (
+          {data.release_date ||
+            (data.first_air_date && (
+              <p>
+                {format(
+                  new Date(data.release_date || data.first_air_date),
+                  "MMMM do yyyy"
+                )}
+              </p>
+            ))}
+          {data.vote_average && data.vote_average > 0 && (
             <p className="bg-black px-1 rounded-full text-white">
               Rating: {Number(data.vote_average).toFixed(1)}
             </p>

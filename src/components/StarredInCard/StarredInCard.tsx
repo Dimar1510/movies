@@ -1,11 +1,17 @@
-import React from "react";
 import { selectImageURL } from "../../store/movieSlice";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import noImage from "../../assets/images/no-image.jpg";
+import { ICardItem, MediaType } from "../../store/types";
+import { FC } from "react";
 
-const StarredInCard = ({ data, type }) => {
+interface IProps {
+  data: ICardItem;
+  type: MediaType;
+}
+
+const StarredInCard: FC<IProps> = ({ data, type }) => {
   const imageUrl = useSelector(selectImageURL);
 
   return (
@@ -28,11 +34,12 @@ const StarredInCard = ({ data, type }) => {
             {data.title || data.name}
           </h2>
           <p className="text-sm text-neutral-500">
-            {(data.release_date || data.first_air_date) &&
-              format(
-                new Date(data.release_date || data.first_air_date),
-                "yyyy"
-              )}
+            {data.release_date ||
+              (data.first_air_date &&
+                format(
+                  new Date(data.release_date || data.first_air_date),
+                  "yyyy"
+                ))}
           </p>
           <p className=" text-neutral-500 text-sm">
             Rating: {Number(data.vote_average).toFixed(1)}

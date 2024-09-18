@@ -1,11 +1,12 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { selectSearchInput, setSearchInput } from "../../store/movieSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { ChangeEvent } from "react";
 
 const SearchInput = ({ isHeader = false }) => {
-  const dispatch = useDispatch();
-  const searchInput = useSelector(selectSearchInput);
-  const handleInputChange = (e) => {
+  const dispatch = useAppDispatch();
+  const searchInput = useAppSelector(selectSearchInput);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchInput(e.target.value));
   };
 

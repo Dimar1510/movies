@@ -1,44 +1,41 @@
-import React, { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import Card from "../Card/Card";
-import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 import CardVideo from "../CardVideo/CardVideo";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
+import { Direction, ICardItem, MediaType } from "../../store/types";
+import ArrowButton from "../ArrowButton/ArrowButton";
 
-const ArrowButton = ({ direction, onClick, isVisible = true }) => {
-  if (!isVisible) return <div></div>;
-  return (
-    <button
-      onClick={onClick}
-      className="bg-white p-1 text-black rounded-full -mr-2 z-20"
-    >
-      {direction === "left" && <FaAngleLeft />}
-      {direction === "right" && <FaAngleRight />}
-    </button>
-  );
-};
+interface IProps {
+  sectionData: ICardItem[];
+  heading: string;
+  isTrending?: boolean;
+  type: MediaType;
+  isVideo?: boolean;
+}
 
-const HorizontalScroll = ({
+const HorizontalScroll: FC<IProps> = ({
   sectionData,
   heading,
   isTrending = false,
   type,
   isVideo = false,
 }) => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [isLeftVisible, setIsLeftVisible] = useState(true);
   const [isRightVisible, setIsRightVisible] = useState(true);
   const [playVideo, setPlayVideo] = useState(false);
   const [playVideoId, setPlayVideoId] = useState("");
 
-  const handlePlayVideo = (data) => {
+  const handlePlayVideo = (data: string) => {
     setPlayVideoId(data);
     setPlayVideo(true);
   };
 
   const handleNext = () => {
     if (
-      containerRef.current.scrollWidth - containerRef.current.offsetWidth >
+      (containerRef.current?.scrollWidth ?? 0) -
+        (containerRef.current?.offsetWidth ?? 0) >
       scrollLeft
     ) {
       setScrollLeft((prev) => prev + 300);
@@ -51,13 +48,15 @@ const HorizontalScroll = ({
   };
 
   useEffect(() => {
+    if (!containerRef.current) return;
     if (scrollLeft === 0) {
       setIsLeftVisible(false);
     } else {
       setIsLeftVisible(true);
     }
     if (
-      containerRef.current.scrollWidth - containerRef.current.offsetWidth <
+      (containerRef.current?.scrollWidth ?? 0) -
+        (containerRef.current?.offsetWidth ?? 0) <
       scrollLeft
     ) {
       setIsRightVisible(false);
@@ -80,12 +79,12 @@ const HorizontalScroll = ({
           {isVideo
             ? sectionData.map((item) => (
                 <CardVideo
-                  videoKey={item.key}
+                  videoKey={item.key || ""}
                   key={item.key}
-                  onClick={() => handlePlayVideo(item.key)}
-                  videoName={item.name}
-                  date={item.published_at}
-                  type={item.type}
+                  onClick={() => handlePlayVideo(item.key || "")}
+                  videoName={item.name || ""}
+                  videoDate={item.published_at || ""}
+                  type={item.type || ""}
                 />
               ))
             : sectionData.map((item, index) => (
@@ -100,13 +99,13 @@ const HorizontalScroll = ({
         </div>
         <div className="absolute top-0 hidden lg:flex justify-between items-center size-full">
           <ArrowButton
-            direction={"left"}
+            direction={Direction.left}
             onClick={handlePrev}
             isVisible={isLeftVisible}
           />
 
           <ArrowButton
-            direction={"right"}
+            direction={Direction.right}
             onClick={handleNext}
             isVisible={isRightVisible}
           />
