@@ -2,7 +2,6 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import MobileNav from "./components/MobileNav/MobileNav";
-import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setImageURL, setSearchInput } from "./store/movieSlice";
