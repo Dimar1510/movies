@@ -7,7 +7,7 @@ const ERROR_MESSAGES = {
 const ErrorElement = ({
   errorText = "Unknown error",
 }: {
-  errorText?: string;
+  errorText: string | null;
 }) => {
   return (
     <section

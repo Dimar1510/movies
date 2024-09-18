@@ -9,7 +9,7 @@ interface IProps {
   sectionData: ICardItem[];
   heading: string;
   isTrending?: boolean;
-  type: MediaType;
+  type?: MediaType;
   isVideo?: boolean;
 }
 
@@ -93,7 +93,7 @@ const HorizontalScroll: FC<IProps> = ({
                   data={item}
                   index={index + 1}
                   isTrending={isTrending}
-                  type={item.media_type || type}
+                  type={item.media_type || type || "movie"}
                 />
               ))}
         </div>

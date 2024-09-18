@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import Spinner from "../components/Spinner/Spinner";
@@ -9,8 +8,15 @@ import { useSelector } from "react-redux";
 import { compareDesc, format, formatDistanceStrict } from "date-fns";
 import StarredInCard from "../components/StarredInCard/StarredInCard";
 import Gallery from "../components/Gallery/Gallery";
+import { ICardItem } from "../store/types";
 
-const PersonDetail = ({ title, detailText }) => {
+const PersonDetail = ({
+  title,
+  detailText,
+}: {
+  title: string;
+  detailText: string;
+}) => {
   return (
     <div className="w-full flex justify-between gap-4">
       <p className="flex-1 text-neutral-400">{title}</p>
@@ -27,29 +33,32 @@ const Person = () => {
   const { data: creditsData, loading: creditsLoading } = useFetch(
     `/person/${id}/combined_credits`
   );
-  const { data: imageData } = useFetch(`/person/${id}/images`);
 
-  const starredIn = creditsData?.cast
-    ?.filter(
-      (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
-    )
-    .sort((a, b) =>
-      compareDesc(
-        new Date(a.release_date || a.first_air_date),
-        new Date(b.release_date || b.first_air_date)
+  const starredIn =
+    !Array.isArray(creditsData) &&
+    (creditsData?.cast
+      ?.filter(
+        (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
       )
-    );
+      .sort((a, b) =>
+        compareDesc(
+          new Date(a.release_date || a.first_air_date || ""),
+          new Date(b.release_date || b.first_air_date || "")
+        )
+      ) as ICardItem[]);
 
-  const workedOn = creditsData?.crew
-    ?.filter(
-      (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
-    )
-    .sort((a, b) =>
-      compareDesc(
-        new Date(a.release_date || a.first_air_date),
-        new Date(b.release_date || b.first_air_date)
+  const workedOn =
+    !Array.isArray(creditsData) &&
+    (creditsData?.crew
+      ?.filter(
+        (obj, index, self) => index === self.findIndex((o) => o.id === obj.id)
       )
-    );
+      .sort((a, b) =>
+        compareDesc(
+          new Date(a.release_date || a.first_air_date || ""),
+          new Date(b.release_date || b.first_air_date || "")
+        )
+      ) as ICardItem[]);
 
   if (loading || creditsLoading)
     return (
@@ -59,7 +68,7 @@ const Person = () => {
     );
 
   if (error) return <ErrorElement errorText={error} />;
-  if (data && creditsData)
+  if (data && creditsData && !Array.isArray(data))
     return (
       <section className="lg:pt-24 pb-8">
         <div className="container justify-center mx-auto px-3 py-16 lg:py-0 flex flex-col lg:flex-row gap-10">
@@ -80,7 +89,7 @@ const Person = () => {
               </h3>
               <PersonDetail
                 title={"Known for"}
-                detailText={data.known_for_department}
+                detailText={data.known_for_department || ""}
               />
               {data.birthday && (
                 <PersonDetail
@@ -90,14 +99,13 @@ const Person = () => {
                     "MMMM do yyyy"
                   )}, ${formatDistanceStrict(
                     Date.now(),
-                    new Date(data.birthday),
-                    "yyyy"
+                    new Date(data.birthday)
                   )}`}
                 />
               )}
               <PersonDetail
                 title={"Place of birth"}
-                detailText={data.place_of_birth}
+                detailText={data.place_of_birth || ""}
               />
               {data.deathday && (
                 <PersonDetail
@@ -115,9 +123,9 @@ const Person = () => {
           </div>
         </div>
 
-        <Gallery id={id} type={"person"} />
+        <Gallery id={id || ""} type={"person"} />
 
-        {starredIn.length > 0 && (
+        {starredIn && starredIn.length > 0 && (
           <div className="container mx-auto lg:mt-12 flex flex-col gap-4">
             <h3 className="text-xl lg:text-2xl font-semibold text-white text-center">
               Starred in:
@@ -126,14 +134,14 @@ const Person = () => {
               {starredIn.map((item) => (
                 <StarredInCard
                   data={item}
-                  type={item.media_type}
+                  type={item.media_type || "movie"}
                   key={item.id}
                 />
               ))}
             </div>
           </div>
         )}
-        {workedOn.length > 0 && (
+        {workedOn && workedOn.length > 0 && (
           <div className="container mx-auto lg:mt-12 flex flex-col gap-4">
             <h3 className="text-xl lg:text-2xl font-semibold text-white text-center">
               Worked on:
@@ -142,7 +150,7 @@ const Person = () => {
               {workedOn.map((item) => (
                 <StarredInCard
                   data={item}
-                  type={item.media_type}
+                  type={item.media_type || "movie"}
                   key={item.id}
                 />
               ))}

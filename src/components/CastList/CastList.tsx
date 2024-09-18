@@ -1,10 +1,10 @@
 import { selectImageURL } from "../../store/movieSlice";
 import noImage from "../../assets/images/no-image.jpg";
 import { Link } from "react-router-dom";
-import { ICardItem } from "../../store/types";
+import { Person } from "../../store/types";
 import { useAppSelector } from "../../store/hooks";
 
-const CastList = ({ data }: { data: ICardItem[] }) => {
+const CastList = ({ data }: { data: Person[] }) => {
   const imageUrl = useAppSelector(selectImageURL);
 
   if (data)

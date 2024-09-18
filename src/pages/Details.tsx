@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { useSelector } from "react-redux";
@@ -13,8 +13,15 @@ import CastList from "../components/CastList/CastList";
 import ErrorElement from "../components/ErrorElement/ErrorElement";
 import Videos from "../components/Videos/Videos";
 import Gallery from "../components/Gallery/Gallery";
+import isMediaType from "../components/utils/isMediaType";
 
-const Detail = ({ hasDivider = true, text }) => {
+const Detail = ({
+  hasDivider = true,
+  text,
+}: {
+  hasDivider?: boolean;
+  text: string;
+}) => {
   return (
     <>
       {hasDivider && <span className="hidden md:inline">|</span>}
@@ -23,11 +30,11 @@ const Detail = ({ hasDivider = true, text }) => {
   );
 };
 
-const CrewMember = ({ name, id }) => {
+const CrewMember = ({ name, id }: { name: string; id: number }) => {
   return (
     <Link
       className="text-white font-semibold underline hover:text-themeColor"
-      to={`/person/${id}`}
+      to={`/person/${id.toString()}`}
     >
       {name}
     </Link>
@@ -41,13 +48,17 @@ const Details = () => {
   const { data, error, loading } = useFetch(`/${type}/${params?.id}`);
   const { data: castData } = useFetch(`/${type}/${params?.id}/credits`);
 
-  const writers = castData?.crew?.filter((el) => el?.job === "Writer");
+  const writers =
+    !Array.isArray(castData) &&
+    castData?.crew?.filter((el) => el?.job === "Writer");
 
-  const directors = castData?.crew?.filter((el) => el?.job === "Director");
+  const directors =
+    !Array.isArray(castData) &&
+    castData?.crew?.filter((el) => el?.job === "Director");
 
-  const creators = data?.created_by;
+  const creators = !Array.isArray(data) && data?.created_by;
 
-  const genres = data?.genres?.map((el) => el?.name);
+  const genres = !Array.isArray(data) && data?.genres?.map((el) => el?.name);
 
   useEffect(() => {
     window.scrollTo({
@@ -64,7 +75,7 @@ const Details = () => {
 
   if (error) return <ErrorElement errorText={error} />;
 
-  if (data && castData)
+  if (data && !Array.isArray(data) && !Array.isArray(castData))
     return (
       <div className="pt-6">
         <div className="w-full h-[300px] relative hidden lg:block">
@@ -85,7 +96,8 @@ const Details = () => {
               className="w-60 object-cover rounded-lg"
             />
             <Divider />
-            {data.genres.length > 0 &&
+            {genres &&
+              genres.length > 0 &&
               genres.map((item) => (
                 <p className="text-sm" key={item}>
                   {item}
@@ -106,16 +118,16 @@ const Details = () => {
                   text={`Rating: ${Number(data.vote_average).toFixed(1)}`}
                 />
               )}
-              {data.popularity > 0 && (
+              {data.popularity && (
                 <Detail text={`View: ${Number(data.popularity).toFixed(0)}`} />
               )}
-              {data.runtime > 0 && (
+              {data.runtime && (
                 <Detail text={`Duration: ${data.runtime} min`} />
               )}
-              {data.number_of_seasons > 0 && (
+              {data.number_of_seasons && (
                 <Detail text={`Seasons: ${data.number_of_seasons}`} />
               )}
-              {data.number_of_episodes > 0 && (
+              {data.number_of_episodes && (
                 <Detail text={`Episodes: ${data.number_of_episodes}`} />
               )}
             </div>
@@ -123,7 +135,7 @@ const Details = () => {
             <h3 className="font-bold mb-1 lg:text-lg text-white">Overview</h3>
             <p>{data.overview}</p>
             <Divider />
-            <div className="flex gap-3 flex-col md:flex-row">
+            <div className="flex gap-3 flex-col md:flex-row flex-wrap">
               {data.origin_country && (
                 <Detail
                   hasDivider={false}
@@ -133,15 +145,22 @@ const Details = () => {
               {data.status && <Detail text={`Status: ${data.status}`} />}
               {(data.release_date || data.first_air_date) && (
                 <Detail
-                  text={` Release Date: ${format(
-                    new Date(data.release_date || data.first_air_date),
+                  text={` Release: ${format(
+                    new Date(data.release_date || data.first_air_date || ""),
                     "MMMM do yyyy"
                   )}`}
                 />
               )}
-              {data.revenue > 0 && (
+              {data.budget && (
                 <Detail
-                  text={`Revenue: ${Number(data.revenue).toLocaleString(
+                  text={`Budget: $${Number(data.budget).toLocaleString(
+                    "en-US"
+                  )}`}
+                />
+              )}
+              {data.revenue && (
+                <Detail
+                  text={`Revenue: $${Number(data.revenue).toLocaleString(
                     "en-US"
                   )}`}
                 />
@@ -156,7 +175,7 @@ const Details = () => {
                     <CrewMember
                       key={person.id}
                       id={person.id}
-                      name={person.name}
+                      name={person.name || ""}
                     />
                   ))}
                 </p>
@@ -171,7 +190,7 @@ const Details = () => {
                     <CrewMember
                       key={person.id}
                       id={person.id}
-                      name={person.name}
+                      name={person.name || ""}
                     />
                   ))}
                 </p>
@@ -186,18 +205,23 @@ const Details = () => {
                     <CrewMember
                       key={person.id}
                       id={person.id}
-                      name={person.name}
+                      name={person.name || ""}
                     />
                   ))}
                 </p>
               </>
             )}
             <Divider />
-            <CastList data={castData.cast} />
+            <CastList data={castData?.cast || []} />
           </div>
         </div>
-        <Gallery id={params?.id} type={type} />
-        <Videos itemId={params?.id} />
+        {params.id && isMediaType(type) && (
+          <>
+            <Gallery id={params?.id} type={type} />
+            <Videos itemId={params?.id} />
+          </>
+        )}
+
         <Similar />
         <Recommendations />
       </div>

@@ -12,8 +12,7 @@ export interface ICardItem {
   known_for_department?: string;
   job?: string;
   character?: string;
-  order?: number;
-  genres?: string[];
+  genres?: { id: number; name: string }[];
   popularity?: number;
   runtime?: number;
   number_of_seasons?: number;
@@ -29,6 +28,32 @@ export interface ICardItem {
   key?: string;
   type?: string;
   published_at?: string;
+  created_by: Person[];
+  crew: Person[];
+  cast: Person[];
+  birthday?: string;
+  deathday?: string;
+  place_of_birth?: string;
+  biography?: string;
+  budget?: number;
+}
+
+export interface Person {
+  adult?: boolean;
+  gender?: number;
+  id: number;
+  known_for_department?: string;
+  name?: string;
+  original_name?: string;
+  popularity?: number;
+  profile_path?: string;
+  character?: string;
+  credit_id?: string;
+  order?: number;
+  job?: string;
+
+  release_date?: string;
+  first_air_date?: string;
 }
 
 export type MediaType = "tv" | "movie" | "person";

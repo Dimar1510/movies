@@ -7,7 +7,7 @@ import { useAppSelector } from "../../store/hooks";
 import ArrowButton from "../ArrowButton/ArrowButton";
 
 interface IProps {
-  id: number;
+  id: string;
   type: MediaType;
 }
 
@@ -27,9 +27,7 @@ const Gallery: FC<IProps> = ({ id, type }) => {
     : [];
 
   const handleNext = () => {
-    if ((slider?.scrollWidth ?? 0) - (slider?.offsetWidth ?? 0) > scrollLeft) {
-      setScrollLeft((prev) => prev + 300);
-    }
+    setScrollLeft((prev) => prev + 300);
   };
   const handlePrev = () => {
     if (scrollLeft > 0) {
@@ -38,7 +36,9 @@ const Gallery: FC<IProps> = ({ id, type }) => {
   };
 
   useEffect(() => {
-    if (!slider) return;
+    if (!slider) {
+      return;
+    }
     if (scrollLeft === 0) {
       setIsLeftVisible(false);
     } else {
@@ -79,8 +79,6 @@ const Gallery: FC<IProps> = ({ id, type }) => {
     return () =>
       dialogRef.current?.removeEventListener("click", closeOnOutsideClick);
   });
-
-  console.log(imageData);
 
   if (imageData && imgArray.length > 0)
     return (

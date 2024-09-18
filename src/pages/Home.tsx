@@ -2,7 +2,6 @@ import HomeBanner from "../components/HomeBanner/HomeBanner";
 import HorizontalScroll from "../components/HorizontalScroll/HorizontalScroll";
 import { useFetch } from "../hooks/useFetch";
 import Spinner from "../components/Spinner/Spinner";
-import { useEffect, useState } from "react";
 import ErrorElement from "../components/ErrorElement/ErrorElement";
 
 const Home = () => {
@@ -77,9 +76,9 @@ const Home = () => {
 
   return (
     <>
-      {trendingData && <HomeBanner bannerData={trendingData} />}
+      {Array.isArray(trendingData) && <HomeBanner bannerData={trendingData} />}
 
-      {trendingData && (
+      {Array.isArray(trendingData) && (
         <HorizontalScroll
           heading={"Trending"}
           sectionData={trendingData}
@@ -87,7 +86,7 @@ const Home = () => {
         />
       )}
 
-      {nowPlayingData && (
+      {Array.isArray(nowPlayingData) && (
         <HorizontalScroll
           heading={"Now Playing"}
           sectionData={nowPlayingData}
@@ -95,7 +94,7 @@ const Home = () => {
         />
       )}
 
-      {topRatedData && (
+      {Array.isArray(topRatedData) && (
         <HorizontalScroll
           heading={"Top Rated"}
           sectionData={topRatedData}
@@ -103,7 +102,7 @@ const Home = () => {
         />
       )}
 
-      {popularShowsData && (
+      {Array.isArray(popularShowsData) && (
         <HorizontalScroll
           heading={"Popular Shows"}
           sectionData={popularShowsData}
@@ -111,7 +110,7 @@ const Home = () => {
         />
       )}
 
-      {onAirShowsData && (
+      {Array.isArray(onAirShowsData) && (
         <HorizontalScroll
           heading={"On Air Shows"}
           sectionData={onAirShowsData}
@@ -119,7 +118,7 @@ const Home = () => {
         />
       )}
 
-      {people && (
+      {Array.isArray(people) && (
         <HorizontalScroll
           heading={"People"}
           sectionData={people}
