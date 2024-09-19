@@ -5,7 +5,7 @@ const MobileNav = () => {
   return (
     <section className="lg:hidden h-14 bg-black fixed bottom-0 w-full z-40">
       <nav
-        className={`flex items-center justify-between h-full text-neutral-400`}
+        className={`flex items-center justify-around h-full text-neutral-400`}
       >
         {mobileNavigation.map((item) => (
           <NavLink
