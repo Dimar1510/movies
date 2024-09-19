@@ -15,7 +15,7 @@ const ImageModal = forwardRef<HTMLDialogElement, IProps>(
     return (
       <dialog
         ref={ref}
-        className="m-auto backdrop:backdrop-brightness-[.25] min-w-[300px] min-h-[300px] bg-gray-400"
+        className="m-auto backdrop:backdrop-brightness-[.25] min-w-[300px] bg-gray-400"
       >
         <div className="relative w-full h-full flex justify-center items-center bg-transparent">
           <img
