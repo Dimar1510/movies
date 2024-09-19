@@ -3,8 +3,9 @@ import Card from "../components/Card/Card";
 import SearchInput from "../components/SearchInput/SearchInput";
 import ScrollTop from "../components/ScrollTop/ScrollTop";
 import { useFetchSearch } from "../hooks/useFetchSearch";
+import { ReactElement } from "react";
 
-const Heading = ({ children }) => {
+const Heading = ({ children }: { children: ReactElement | string }) => {
   return (
     <h3 className="text-lg lg:text-xl font-semibold my-3 px-4">{children}</h3>
   );
@@ -47,7 +48,11 @@ const Search = () => {
             </Heading>
             <div className="flex flex-wrap gap-6 justify-evenly">
               {data.map((item) => (
-                <Card key={item.id} data={item} type={item.media_type} />
+                <Card
+                  key={item.id}
+                  data={item}
+                  type={item.media_type || "movie"}
+                />
               ))}
             </div>
           </>

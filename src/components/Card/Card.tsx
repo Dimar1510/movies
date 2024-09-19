@@ -10,7 +10,7 @@ interface IProps {
   data: ICardItem;
   isTrending?: boolean;
   index?: number;
-  type: MediaType;
+  type?: MediaType;
 }
 
 const Card: FC<IProps> = ({ data, isTrending = false, index = 0, type }) => {
