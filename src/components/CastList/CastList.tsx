@@ -9,11 +9,11 @@ const CastList = ({ data }: { data: Person[] }) => {
 
   if (data)
     return (
-      <div>
+      <>
         <h3 className="text-white font-bold">
           {data.length > 0 ? "Cast:" : "No information about the cast"}
         </h3>
-        <div className="flex gap-5 my-4 flex-wrap">
+        <div className="flex gap-5 my-4 flex-wrap justify-evenly lg:justify-normal">
           {data
             .sort((a, b) => ((a.order ?? 0) > (b.order ?? 0) ? 1 : -1))
             .map((actor) => (
@@ -39,7 +39,7 @@ const CastList = ({ data }: { data: Person[] }) => {
               </div>
             ))}
         </div>
-      </div>
+      </>
     );
 };
 
